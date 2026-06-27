@@ -26,9 +26,9 @@ import webbrowser
 from cadoo_cli.colors import Colors, color
 from cadoo_cli.config import load_config
 
-DEFAULT_PORTAL_URL = "https://doostudio.io/portal"
-SUBSCRIPTION_URL = "https://doostudio.io/portal/manage-subscription"
-DOCS_URL = "https://doostudio.io/cadoo/docs/user-guide/features/tool-gateway"
+DEFAULT_PORTAL_URL = "https://doostudio.com.br/agentecadoo"
+SUBSCRIPTION_URL = "https://doostudio.com.br/agentecadoo"
+DOCS_URL = "https://doostudio.com.br/cadoo-agent/auth"
 
 
 def _cmd_status(args) -> int:

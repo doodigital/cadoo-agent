@@ -67,8 +67,8 @@ AUTH_STORE_VERSION = 1
 AUTH_LOCK_TIMEOUT_SECONDS = 15.0
 
 # DooStudio Portal defaults
-DEFAULT_NOUS_PORTAL_URL = "https://doostudio.io/portal"
-DEFAULT_NOUS_INFERENCE_URL = "https://inference-api.doostudio.io/v1"
+DEFAULT_NOUS_PORTAL_URL = "https://doostudio.com.br"
+DEFAULT_NOUS_INFERENCE_URL = "https://doostudio.com.br/api/cadoo_agent_gateway.php"
 DEFAULT_NOUS_CLIENT_ID = "cadoo-cli"
 NOUS_INFERENCE_INVOKE_SCOPE = "inference:invoke"
 NOUS_BILLING_MANAGE_SCOPE = "billing:manage"
@@ -4537,8 +4537,10 @@ def _request_device_code(
     scope: Optional[str],
 ) -> Dict[str, Any]:
     """POST to the device code endpoint. Returns device_code, user_code, etc."""
+    # DooStudio gateway usa ?action=device_code
+    gateway_url = f"{portal_base_url}/api/cadoo_agent_gateway.php?action=device_code"
     response = client.post(
-        f"{portal_base_url}/api/oauth/device/code",
+        gateway_url,
         data={
             "client_id": client_id,
             **({"scope": scope} if scope else {}),
@@ -4570,8 +4572,9 @@ def _poll_for_token(
     current_interval = max(1, min(poll_interval, DEVICE_AUTH_POLL_INTERVAL_CAP_SECONDS))
 
     while time.monotonic() < deadline:
+        # DooStudio gateway usa ?action=token
         response = client.post(
-            f"{portal_base_url}/api/oauth/token",
+            f"{portal_base_url}/api/cadoo_agent_gateway.php?action=token",
             data={
                 "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
                 "client_id": client_id,
