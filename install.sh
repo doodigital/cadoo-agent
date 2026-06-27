@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # ============================================================================
 # Cadoo Agent — Instalador oficial
-# https://doostudio.com.br/cadoo-agent/install.sh
+# https://doost.online/cadoo-agent/install.sh
 #
 # Uso:
-#   curl -fsSL https://doostudio.com.br/cadoo-agent/install.sh | bash
+#   curl -fsSL https://doost.online/cadoo-agent/install.sh | bash
 # ============================================================================
 set -euo pipefail
 
