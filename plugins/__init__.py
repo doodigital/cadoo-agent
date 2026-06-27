@@ -1,0 +1,1 @@
+# Cadoo plugins package

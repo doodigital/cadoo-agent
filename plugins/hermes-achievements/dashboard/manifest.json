@@ -1,0 +1,11 @@
+{
+  "name": "cadoo-achievements",
+  "label": "Achievements",
+  "description": "Steam-style achievements for vibe coding and agentic Cadoo workflows.",
+  "icon": "Star",
+  "version": "0.4.0",
+  "tab": { "path": "/achievements", "position": "after:analytics" },
+  "entry": "dist/index.js",
+  "css": "dist/style.css",
+  "api": "plugin_api.py"
+}
