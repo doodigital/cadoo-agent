@@ -174,43 +174,14 @@ def _xai_curated_models() -> list[str]:
 
 _PROVIDER_MODELS: dict[str, list[str]] = {
     "nous": [
-        # Anthropic
-        "anthropic/claude-opus-4.8",
-        "anthropic/claude-sonnet-4.6",
-        "anthropic/claude-haiku-4.5",
-        # OpenAI
-        "openai/gpt-5.5",
-        "openai/gpt-5.5-pro",
-        "openai/gpt-5.4-mini",
-        # Google
-        "google/gemini-3-pro-preview",
-        "google/gemini-3.1-pro-preview",
-        "google/gemini-3.5-flash",
-        # xAI
-        "x-ai/grok-4.3",
-        # DeepSeek
-        "deepseek/deepseek-v4-pro",
-        "deepseek/deepseek-v4-flash",
-        # Qwen
-        "qwen/qwen3.7-max",
-        "qwen/qwen3.7-plus",
-        "qwen/qwen3.6-35b-a3b",
-        # MoonshotAI
-        "moonshotai/kimi-k2.6",
-        "moonshotai/kimi-k2.7-code",
-        # MiniMax
-        "minimax/minimax-m3",
-        # Z-AI
-        "z-ai/glm-5.2",
-        "z-ai/glm-5.1",
-        # Xiaomi
-        "xiaomi/mimo-v2.5-pro",
-        # Tencent
-        "tencent/hy3-preview",
-        # StepFun
-        "stepfun/step-3.7-flash",
-        # NVIDIA
-        "nvidia/nemotron-3-super-120b-a12b",
+        # Google Gemini via DooStudio Portal (Vertex AI)
+        "gemini-2.5-pro",
+        "gemini-2.5-flash",
+        "gemini-3-pro-preview",
+        "gemini-3.1-pro-preview",
+        "gemini-3.5-flash",
+        "gemini-3.1-flash",
+        "gemini-3.1-flash-lite-preview",
     ],
     # Native OpenAI Chat Completions (api.openai.com). Used by /model counts and
     # provider_model_ids fallback when /v1/models is unavailable.
