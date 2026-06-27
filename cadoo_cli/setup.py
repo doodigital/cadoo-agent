@@ -2617,7 +2617,46 @@ def _offer_openclaw_migration(cadoo_home: Path) -> bool:
 # Main Wizard Orchestrator
 # =============================================================================
 
+def setup_language(config: dict) -> None:
+    """Seleção de idioma da interface / Language selection / Selección de idioma."""
+    from agent.i18n import reset_language_cache
+
+    print_header("🌐 Idioma / Language / Idioma")
+
+    current = (config.get("display") or {}).get("language", "en")
+
+    LANG_OPTIONS = [
+        ("pt", "🇧🇷 Português — boas-vindas, prompts e mensagens em português"),
+        ("en", "🇺🇸 English — welcome messages and prompts in English"),
+        ("es", "🇪🇸 Español — bienvenida y mensajes en español"),
+    ]
+
+    current_idx = next((i for i, (code, _) in enumerate(LANG_OPTIONS) if code == current), 1)
+
+    choice = prompt_choice(
+        "Selecione o idioma / Select language / Seleccione el idioma:",
+        [label for _, label in LANG_OPTIONS],
+        current_idx,
+    )
+
+    lang_code = LANG_OPTIONS[choice][0]
+
+    if "display" not in config or not isinstance(config.get("display"), dict):
+        config["display"] = {}
+    config["display"]["language"] = lang_code
+
+    reset_language_cache()
+
+    msgs = {
+        "pt": "✓ Idioma definido: Português",
+        "en": "✓ Language set: English",
+        "es": "✓ Idioma configurado: Español",
+    }
+    print_success(msgs.get(lang_code, f"✓ Language: {lang_code}"))
+
+
 SETUP_SECTIONS = [
+    ("language", "Idioma / Language", setup_language),
     ("model", "Model & Provider", setup_model_provider),
     ("tts", "Text-to-Speech", setup_tts),
     ("terminal", "Terminal Backend", setup_terminal_backend),
@@ -2877,6 +2916,11 @@ def run_setup_wizard(args):
         if reconfigure_requested or quick_requested:
             print_info("No existing configuration found — running first-time setup.")
             print()
+
+        # ── Seleção de idioma — primeiro passo do setup ──
+        setup_language(config)
+        save_config(config)
+        print()
 
         # Offer OpenClaw migration before configuration begins
         migration_ran = _offer_openclaw_migration(cadoo_home)
