@@ -6463,12 +6463,12 @@ def _discard_stashed_changes(
 # =========================================================================
 
 OFFICIAL_REPO_URLS = {
-    "https://github.com/DooStudio/cadoo.git",
-    "git@github.com:DooStudio/cadoo.git",
-    "https://github.com/DooStudio/cadoo",
-    "git@github.com:DooStudio/cadoo",
+    "https://github.com/doodigital/cadoo-agent.git",
+    "git@github.com:doodigital/cadoo-agent.git",
+    "https://github.com/doodigital/cadoo-agent",
+    "git@github.com:doodigital/cadoo-agent",
 }
-OFFICIAL_REPO_URL = "https://github.com/DooStudio/cadoo.git"
+OFFICIAL_REPO_URL = "git@github.com:doodigital/cadoo-agent.git"
 SKIP_UPSTREAM_PROMPT_FILE = ".skip_upstream_prompt"
 
 

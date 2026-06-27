@@ -8,7 +8,7 @@
 # ============================================================================
 set -euo pipefail
 
-REPO="https://github.com/doodigital/cadoo-agent.git"
+REPO="https://github.com/doodigital/cadoo-agent.git"  # HTTPS para instalação pública
 INSTALL_DIR="$HOME/.cadoo-agent"
 BIN_DIR="/usr/local/bin"
 
