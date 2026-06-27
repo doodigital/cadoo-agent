@@ -295,7 +295,6 @@ all = [
 
 [project.scripts]
 cadoo = "cadoo_cli.main:main"
-cadoo = "run_agent:main"
 cadoo-acp = "acp_adapter.entry:main"
 
 [tool.setuptools]
