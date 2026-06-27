@@ -17,7 +17,11 @@
   <a href="README.es.md"><img src="https://img.shields.io/badge/Lang-Español-orange?style=for-the-badge" alt="Español"></a>
 </p>
 
-**The self-improving AI agent built by [DooStudio](https://doostudio.io).** It's the only agent with a built-in learning loop — it creates skills from experience, improves them during use, nudges itself to persist knowledge, searches its own past conversations, and builds a deepening model of who you are across sessions. Run it on a [VPS](https://www.hostinger.com/br?REFERRALCODE=OW2ADRIANTJH), a GPU cluster, or serverless infrastructure that costs nearly nothing when idle. It's not tied to your laptop — talk to it from Telegram while it works on a cloud VM.
+**🇧🇷 O agente de IA que aprende sozinho, criado pela [DooStudio](https://doostudio.com.br).** Ele cria habilidades a partir da experiência, melhora durante o uso, guarda memória entre sessões e roda em qualquer lugar — no seu laptop, num [VPS](https://www.hostinger.com/br?REFERRALCODE=OW2ADRIANTJH) ou na nuvem. Fale com ele pelo Telegram enquanto ele trabalha num servidor remoto.
+
+**🇺🇸 The self-improving AI agent built by [DooStudio](https://doostudio.com.br).** It's the only agent with a built-in learning loop — it creates skills from experience, improves them during use, persists memory across sessions, and runs anywhere — on your laptop, a [VPS](https://www.hostinger.com/br?REFERRALCODE=OW2ADRIANTJH), or the cloud. Talk to it from Telegram while it works on a remote server.
+
+**🇪🇸 El agente de IA que aprende solo, creado por [DooStudio](https://doostudio.com.br).** Crea habilidades desde la experiencia, mejora con el uso, guarda memoria entre sesiones y corre en cualquier lugar — en tu laptop, un [VPS](https://www.hostinger.com/br?REFERRALCODE=OW2ADRIANTJH) o la nube. Habla con él por Telegram mientras trabaja en un servidor remoto.
 
 Use any model you want — [DooStudio Portal](https://doostudio.io/portal), [OpenRouter](https://openrouter.ai) (200+ models), [NovitaAI](https://novita.ai) (AI-native cloud for Model API, Agent Sandbox, and GPU Cloud), [NVIDIA NIM](https://build.nvidia.com) (Nemotron), [Xiaomi MiMo](https://platform.xiaomimimo.com), [z.ai/GLM](https://z.ai), [Kimi/Moonshot](https://platform.moonshot.ai), [MiniMax](https://www.minimax.io), [Hugging Face](https://huggingface.co), OpenAI, or your own endpoint. Switch with `cadoo model` — no code changes, no lock-in.
 
