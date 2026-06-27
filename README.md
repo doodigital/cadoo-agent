@@ -4,9 +4,10 @@
 
 # Cadoo Agent ☤
 <p align="center">
-  <a href="https://doostudio.com.br">Cadoo Agent</a> | <a href="https://doostudio.com.br">DooStudio</a>
+  <a href="https://doostudio.com.br/agentecadoo">🌐 Site Oficial / Official Site / Sitio Oficial</a> | <a href="https://doostudio.com.br">DooStudio</a>
 </p>
 <p align="center">
+  <a href="https://doostudio.com.br/agentecadoo"><img src="https://img.shields.io/badge/Site-doostudio.com.br-7B2FBE?style=for-the-badge" alt="Site Oficial"></a>
   <a href="https://discord.gg/DooStudio"><img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord"></a>
   <a href="https://github.com/doodigital/cadoo-agent/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License: MIT"></a>
   <a href="https://doostudio.com.br"><img src="https://img.shields.io/badge/Built%20by-DooStudio-blueviolet?style=for-the-badge" alt="Built by DooStudio"></a>
@@ -165,6 +166,7 @@ pip install -e ".[all]"
 
 ## 🇧🇷 Comunidade / 🇺🇸 Community / 🇪🇸 Comunidad
 
+- 🟣 [Cadoo Agent — Site Oficial](https://doostudio.com.br/agentecadoo)
 - 💬 [Discord](https://discord.gg/DooStudio)
 - 📝 [Blog — leadmestre.com](https://leadmestre.com)
 - 🌐 [DooStudio](https://doostudio.com.br)
