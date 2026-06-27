@@ -85,17 +85,21 @@ if [[ -z "$PYTHON" ]]; then
 fi
 success "Python: $($PYTHON --version)"
 
-# ── Verificar/instalar venv ────────────────────────────────────────────────
-if ! "$PYTHON" -c 'import venv' &>/dev/null; then
-  warn "Módulo venv não encontrado."
+# ── Verificar/instalar venv + ensurepip ───────────────────────────────────
+# Testa criando um venv real em tmp — é o único jeito confiável de checar
+VENV_TEST=$(mktemp -d)
+if ! "$PYTHON" -m venv "$VENV_TEST" &>/dev/null; then
+  rm -rf "$VENV_TEST"
+  warn "python venv/ensurepip não disponível."
   PY_VER=$("$PYTHON" -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
-  apt_install "python${PY_VER}-venv" python3-venv
+  apt_install "python${PY_VER}-venv"
+  # Tentar novamente após instalar
+  if ! "$PYTHON" -m venv "$VENV_TEST" &>/dev/null; then
+    rm -rf "$VENV_TEST"
+    error "Não foi possível instalar o módulo venv. Tente manualmente: sudo apt install python${PY_VER}-venv"
+  fi
 fi
-
-# Verificar novamente após instalar
-if ! "$PYTHON" -c 'import venv' &>/dev/null; then
-  error "Não foi possível instalar o módulo venv. Tente: sudo apt install python3-venv"
-fi
+rm -rf "$VENV_TEST"
 success "venv: OK"
 
 # ── Verificar/instalar pip ─────────────────────────────────────────────────
