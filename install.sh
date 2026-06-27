@@ -44,14 +44,33 @@ if [[ "$OS" != "Linux" && "$OS" != "Darwin" ]]; then
   error "Sistema não suportado: $OS. Use Linux ou macOS."
 fi
 
-# ── Dependências ───────────────────────────────────────────────────────────
-info "Verificando dependências..."
+# ── Função: instalar pacote apt ─────────────────────────────────────────────
+apt_install() {
+  if command -v apt &>/dev/null; then
+    info "Instalando $* via apt..."
+    sudo apt-get update -qq && sudo apt-get install -y "$@" || error "Falha ao instalar $*. Tente manualmente: sudo apt install $*"
+  else
+    error "$* não encontrado e apt não está disponível. Instale manualmente."
+  fi
+}
 
-# Python 3.11+
+# ── Verificar/instalar git ─────────────────────────────────────────────────
+if ! command -v git &>/dev/null; then
+  warn "git não encontrado."
+  apt_install git
+fi
+success "git: $(git --version)"
+
+# ── Verificar/instalar curl ────────────────────────────────────────────────
+if ! command -v curl &>/dev/null; then
+  warn "curl não encontrado."
+  apt_install curl
+fi
+
+# ── Verificar/instalar Python 3.11+ ───────────────────────────────────────
 PYTHON=""
 for cmd in python3.13 python3.12 python3.11 python3; do
   if command -v "$cmd" &>/dev/null; then
-    version=$("$cmd" -c 'import sys; print(sys.version_info[:2])')
     if "$cmd" -c 'import sys; exit(0 if sys.version_info >= (3,11) else 1)' 2>/dev/null; then
       PYTHON="$cmd"
       break
@@ -60,27 +79,31 @@ for cmd in python3.13 python3.12 python3.11 python3; do
 done
 
 if [[ -z "$PYTHON" ]]; then
-  error "Python 3.11+ não encontrado. Instale com: sudo apt install python3 (Linux) ou brew install python (Mac)"
+  warn "Python 3.11+ não encontrado."
+  apt_install python3 python3-pip
+  PYTHON="python3"
 fi
 success "Python: $($PYTHON --version)"
 
-# git
-if ! command -v git &>/dev/null; then
-  error "git não encontrado. Instale com: sudo apt install git"
-fi
-success "git: $(git --version)"
-
-# pip / venv
-if ! "$PYTHON" -m venv --help &>/dev/null; then
+# ── Verificar/instalar venv ────────────────────────────────────────────────
+if ! "$PYTHON" -c 'import venv' &>/dev/null; then
   warn "Módulo venv não encontrado."
-  info "Tentando instalar python3-venv..."
-  if command -v apt &>/dev/null; then
-    PY_VER=$("$PYTHON" -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
-    sudo apt install -y "python${PY_VER}-venv" || error "Falha ao instalar python-venv. Tente manualmente: sudo apt install python3-venv"
-  else
-    error "Instale o módulo venv manualmente para seu sistema."
-  fi
+  PY_VER=$("$PYTHON" -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+  apt_install "python${PY_VER}-venv" python3-venv
 fi
+
+# Verificar novamente após instalar
+if ! "$PYTHON" -c 'import venv' &>/dev/null; then
+  error "Não foi possível instalar o módulo venv. Tente: sudo apt install python3-venv"
+fi
+success "venv: OK"
+
+# ── Verificar/instalar pip ─────────────────────────────────────────────────
+if ! "$PYTHON" -m pip --version &>/dev/null; then
+  warn "pip não encontrado."
+  apt_install python3-pip
+fi
+success "pip: OK"
 
 # ── Clonar ou atualizar ────────────────────────────────────────────────────
 if [[ -d "$INSTALL_DIR/.git" ]]; then
@@ -95,11 +118,15 @@ cd "$INSTALL_DIR"
 
 # ── Ambiente virtual ───────────────────────────────────────────────────────
 info "Criando ambiente virtual..."
+rm -rf venv
 "$PYTHON" -m venv venv --prompt cadoo
 
 info "Instalando dependências (pode demorar alguns minutos)..."
 venv/bin/pip install --quiet --upgrade pip
-venv/bin/pip install --quiet -e ".[all]" || venv/bin/pip install --quiet -e "."
+venv/bin/pip install --quiet -e ".[all]" || {
+  warn "Instalação completa falhou, tentando versão básica..."
+  venv/bin/pip install --quiet -e "."
+}
 
 # ── Criar comando cadoo ────────────────────────────────────────────────────
 info "Instalando comando cadoo em $BIN_DIR..."
@@ -111,16 +138,16 @@ unset PYTHONHOME
 exec \"$INSTALL_DIR/venv/bin/cadoo\" \"\$@\""
 
 if [[ -w "$BIN_DIR" ]]; then
-  echo "$SHIM_CONTENT" > "$SHIM"
+  printf '%s\n' "$SHIM_CONTENT" > "$SHIM"
   chmod +x "$SHIM"
 else
-  echo "$SHIM_CONTENT" | sudo tee "$SHIM" > /dev/null
+  printf '%s\n' "$SHIM_CONTENT" | sudo tee "$SHIM" > /dev/null
   sudo chmod +x "$SHIM"
 fi
 
 # ── Verificar ─────────────────────────────────────────────────────────────
-if command -v cadoo &>/dev/null || [[ -x "$SHIM" ]]; then
-  echo ""
+echo ""
+if [[ -x "$SHIM" ]]; then
   success "✓ Cadoo Agent instalado com sucesso!"
   echo ""
   echo -e "  Execute ${PURPLE}cadoo setup${NC} para configurar."
@@ -131,5 +158,6 @@ if command -v cadoo &>/dev/null || [[ -x "$SHIM" ]]; then
   echo ""
 else
   warn "Instalado, mas 'cadoo' pode não estar no PATH desta sessão."
-  echo "  Adicione ao seu shell: export PATH=\"$BIN_DIR:\$PATH\""
+  echo "  Execute: source ~/.bashrc"
+  echo "  Ou adicione ao PATH: export PATH=\"$BIN_DIR:\$PATH\""
 fi
