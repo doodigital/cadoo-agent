@@ -272,7 +272,7 @@ fix(security): prevent shell injection in sudo password piping
 
 ## Community
 
-- **Discord**: [discord.gg/DooStudio](https://discord.gg/DooStudio)
+- **Discord**: [discord.gg/DooStudio](https://discord.gg/7bXWaQ2fd)
 - **GitHub Discussions**: For design proposals and architecture discussions
 - **Skills Hub**: Upload specialized skills and share with the community
 

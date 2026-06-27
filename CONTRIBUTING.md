@@ -63,7 +63,7 @@ Bundled skills (in `skills/`) ship with every Cadoo install. They should be **br
 
 If your skill is official and useful but not universally needed (e.g., a paid service integration, a heavyweight dependency), put it in **`optional-skills/`** — it ships with the repo but isn't activated by default. Users can discover it via `cadoo skills browse` (labeled "official") and install it with `cadoo skills install` (no third-party warning, built-in trust).
 
-If your skill is specialized, community-contributed, or niche, it's better suited for a **Skills Hub** — upload it to a skills registry and share it in the [DooStudio Discord](https://discord.gg/DooStudio). Users can install it with `cadoo skills install`.
+If your skill is specialized, community-contributed, or niche, it's better suited for a **Skills Hub** — upload it to a skills registry and share it in the [DooStudio Discord](https://discord.gg/7bXWaQ2fd). Users can install it with `cadoo skills install`.
 
 ---
 
@@ -973,7 +973,7 @@ test(tools): add unit tests for file_operations
 
 ## Community
 
-- **Discord**: [discord.gg/DooStudio](https://discord.gg/DooStudio) — for questions, showcasing projects, and sharing skills
+- **Discord**: [discord.gg/DooStudio](https://discord.gg/7bXWaQ2fd) — for questions, showcasing projects, and sharing skills
 - **GitHub Discussions**: For design proposals and architecture discussions
 - **Skills Hub**: Upload specialized skills to a registry and share them with the community
 
