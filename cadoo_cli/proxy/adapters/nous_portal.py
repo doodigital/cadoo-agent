@@ -28,15 +28,14 @@ from cadoo_cli.proxy.adapters.base import UpstreamAdapter, UpstreamCredential
 
 logger = logging.getLogger(__name__)
 
-# Endpoints inference-api.doostudio.io actually serves. Anything else
-# the proxy will reject with 404 — keeps stray clients from leaking weird
-# requests to the upstream.
+# Endpoints do DooStudio Gateway aceitos pelo proxy.
 _ALLOWED_PATHS: FrozenSet[str] = frozenset(
     {
         "/chat/completions",
         "/completions",
         "/embeddings",
         "/models",
+        "/api/cadoo_agent_gateway.php",
     }
 )
 
