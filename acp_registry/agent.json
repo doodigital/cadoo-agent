@@ -1,0 +1,16 @@
+{
+  "id": "cadoo",
+  "name": "Cadoo Agent",
+  "version": "0.17.0",
+  "description": "Self-improving open-source AI agent by DooStudio with ACP editor integration, persistent memory, skills, and rich tool support.",
+  "repository": "https://github.com/DooStudio/cadoo",
+  "website": "https://doostudio.io/cadoo/docs/user-guide/features/acp",
+  "authors": ["DooStudio"],
+  "license": "MIT",
+  "distribution": {
+    "uvx": {
+      "package": "cadoo[acp]==0.17.0",
+      "args": ["cadoo-acp"]
+    }
+  }
+}
