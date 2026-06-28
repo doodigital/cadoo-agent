@@ -2661,3 +2661,103 @@ def _model_flow_anthropic(config, current_model=""):
         print(f"Default model set to: {selected} (via Anthropic)")
     else:
         print("No change.")
+
+
+def _model_flow_local_cli(config, current_model=""):
+    """Flow for Local CLI provider — routes inference through a locally installed
+    and authenticated CLI (claude, gemini, etc.) without requiring API keys.
+    """
+    import shutil
+    from cadoo_cli.auth import (
+        _prompt_model_selection,
+        _save_model_choice,
+        deactivate_provider,
+    )
+    from cadoo_cli.config import load_config, save_config
+    from cadoo_cli.models import _PROVIDER_MODELS
+    from cadoo_cli.proxy.adapters.local_cli import detect_available_cli, _CLI_PREFERENCE
+
+    # Discover which CLIs are available
+    available = [cli for cli in _CLI_PREFERENCE if shutil.which(cli)]
+
+    if not available:
+        print("  Nenhum CLI local encontrado. Instale um dos seguintes:")
+        print("    • claude  — Claude Code (code.claude.ai)")
+        print("    • gemini  — Gemini CLI  (github.com/google-gemini/gemini-cli)")
+        return
+
+    print("  CLIs disponíveis no sistema:")
+    for i, cli in enumerate(available):
+        try:
+            result = subprocess.run(
+                [cli, "--version"],
+                capture_output=True, text=True, timeout=5,
+            )
+            ver = result.stdout.strip().split("\n")[0][:60]
+        except Exception:
+            ver = "(versão desconhecida)"
+        print(f"    {i + 1}. {cli}  — {ver}")
+
+    print()
+
+    if len(available) == 1:
+        chosen_cli = available[0]
+        print(f"  Usando: {chosen_cli}")
+    else:
+        try:
+            raw = input(f"  Escolha o CLI [1-{len(available)}] (Enter = {available[0]}): ").strip()
+        except (KeyboardInterrupt, EOFError):
+            print()
+            return
+        if not raw:
+            chosen_cli = available[0]
+        else:
+            try:
+                idx = int(raw) - 1
+                if 0 <= idx < len(available):
+                    chosen_cli = available[idx]
+                else:
+                    print("  Opção inválida.")
+                    return
+            except ValueError:
+                if raw in available:
+                    chosen_cli = raw
+                else:
+                    print("  Opção inválida.")
+                    return
+
+    print()
+
+    # Model selection
+    model_list = _PROVIDER_MODELS.get("local-cli", ["auto"])
+    selected = _prompt_model_selection(
+        model_list,
+        current_model=current_model,
+        confirm_provider="local-cli",
+    )
+
+    if selected:
+        _save_model_choice(selected if selected != "auto" else "")
+
+        cfg = load_config()
+        model = cfg.get("model")
+        if not isinstance(model, dict):
+            model = {}
+        model["provider"] = "local-cli"
+        model["local_cli"] = chosen_cli
+        if selected and selected != "auto":
+            model["default"] = selected
+        else:
+            model.pop("default", None)
+        model.pop("base_url", None)
+        model.pop("api_mode", None)
+        model.pop("api_key", None)
+        cfg["model"] = model
+        save_config(cfg)
+        deactivate_provider()
+
+        print(f"\n  ✓ Provider configurado: Local CLI ({chosen_cli})")
+        if selected and selected != "auto":
+            print(f"  ✓ Modelo: {selected}")
+    else:
+        print("  Sem alteração.")

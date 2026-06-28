@@ -831,11 +831,13 @@ def _resolve_named_custom_runtime(
             return pool_result
         _da_is_openai_url   = base_url_host_matches(base_url, "openai.com") or base_url_host_matches(base_url, "openai.azure.com")
         _da_is_openrouter   = base_url_host_matches(base_url, "openrouter.ai")
+        _da_is_bedrock_mantle = "bedrock-mantle." in base_url and ".api.aws" in base_url
         api_key_candidates = [
             (explicit_api_key or "").strip(),
             # Gate env key fallbacks on authoritative hosts (#28660)
-            (_getenv("OPENAI_API_KEY", "").strip()     if _da_is_openai_url else ""),
-            (_getenv("OPENROUTER_API_KEY", "").strip() if _da_is_openrouter  else ""),
+            (_getenv("OPENAI_API_KEY", "").strip()          if _da_is_openai_url     else ""),
+            (_getenv("OPENROUTER_API_KEY", "").strip()      if _da_is_openrouter      else ""),
+            (_getenv("AWS_BEARER_TOKEN_BEDROCK", "").strip() if _da_is_bedrock_mantle else ""),
             # Bonus (#28660): derive `<VENDOR>_API_KEY` from the host so users
             # who set DEEPSEEK_API_KEY / GROQ_API_KEY / MISTRAL_API_KEY get the
             # intuitive match without configuring `custom_providers` first.
@@ -883,16 +885,18 @@ def _resolve_named_custom_runtime(
             }
         return pool_result
 
-    _cp_is_openai_url   = base_url_host_matches(base_url, "openai.com") or base_url_host_matches(base_url, "openai.azure.com")
-    _cp_is_openrouter   = base_url_host_matches(base_url, "openrouter.ai")
+    _cp_is_openai_url     = base_url_host_matches(base_url, "openai.com") or base_url_host_matches(base_url, "openai.azure.com")
+    _cp_is_openrouter     = base_url_host_matches(base_url, "openrouter.ai")
+    _cp_is_bedrock_mantle = "bedrock-mantle." in base_url and ".api.aws" in base_url
     api_key_candidates = [
         (explicit_api_key or "").strip(),
         str(custom_provider.get("api_key", "") or "").strip(),
         _getenv(str(custom_provider.get("key_env", "") or "").strip(), "").strip(),
         # Gate provider env keys on their authoritative hosts — sending
         # OPENAI_API_KEY to a local-llm endpoint leaks credentials (#28660).
-        (_getenv("OPENAI_API_KEY", "").strip()     if _cp_is_openai_url  else ""),
-        (_getenv("OPENROUTER_API_KEY", "").strip() if _cp_is_openrouter  else ""),
+        (_getenv("OPENAI_API_KEY", "").strip()           if _cp_is_openai_url     else ""),
+        (_getenv("OPENROUTER_API_KEY", "").strip()       if _cp_is_openrouter      else ""),
+        (_getenv("AWS_BEARER_TOKEN_BEDROCK", "").strip() if _cp_is_bedrock_mantle  else ""),
         # Bonus (#28660): derive `<VENDOR>_API_KEY` from the host as a final
         # fallback when key_env wasn't set explicitly.
         _host_derived_api_key(base_url),
@@ -1705,6 +1709,28 @@ def resolve_runtime_provider(
             "base_url": base_url,
             "api_key": token,
             "source": "env",
+            "requested_provider": requested_provider,
+        }
+
+    # Local CLI provider — routes inference through a locally installed CLI
+    # (claude, gemini, etc.) without requiring API keys.
+    if provider == "local-cli":
+        from cadoo_cli.proxy.adapters.local_cli import detect_available_cli, LOCAL_CLI_BASE_URL
+        cfg_cli = model_cfg.get("local_cli", "").strip()
+        cli = cfg_cli or detect_available_cli()
+        if not cli:
+            raise AuthError(
+                "Nenhum CLI local encontrado. Instale o Claude Code (claude) ou Gemini CLI (gemini) "
+                "e execute 'cadoo setup' para configurar.",
+                code="no_local_cli",
+            )
+        return {
+            "provider": "local-cli",
+            "api_mode": "local_cli",
+            "base_url": LOCAL_CLI_BASE_URL,
+            "api_key": "local-cli",
+            "local_cli": cli,
+            "source": f"local-cli:{cli}",
             "requested_provider": requested_provider,
         }
 

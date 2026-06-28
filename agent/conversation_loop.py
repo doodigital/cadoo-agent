@@ -1246,6 +1246,11 @@ def run_conversation(
                             error_details.append("response is None")
                         else:
                             error_details.append("Bedrock response invalid (no output or choices)")
+                elif agent.api_mode == "local_cli":
+                    # Local CLI responses are plain dicts — no transport validation needed.
+                    if response is None:
+                        response_invalid = True
+                        error_details.append("response is None")
                 else:
                     _ctv = agent._get_transport()
                     if not _ctv.validate_response(response):
@@ -1438,7 +1443,8 @@ def run_conversation(
                     _bedrock_result = _bt_fr.normalize_response(response)
                     finish_reason = _bedrock_result.finish_reason
                 else:
-                    _cc_fr = agent._get_transport()
+                    # local_cli uses chat_completions transport (OpenAI-compatible response)
+                    _cc_fr = agent._get_transport("chat_completions") if agent.api_mode == "local_cli" else agent._get_transport()
                     _finish_result = _cc_fr.normalize_response(response)
                     finish_reason = _finish_result.finish_reason
                     assistant_message = _finish_result
@@ -1468,7 +1474,7 @@ def run_conversation(
                 # exception-based ``content_policy_blocked`` recovery: try a
                 # configured fallback once, otherwise return the refusal.
                 if finish_reason == "content_filter":
-                    _refusal_transport = agent._get_transport()
+                    _refusal_transport = agent._get_transport("chat_completions") if agent.api_mode == "local_cli" else agent._get_transport()
                     if agent.api_mode == "anthropic_messages":
                         _refusal_result = _refusal_transport.normalize_response(
                             response, strip_tool_prefix=agent._is_anthropic_oauth
@@ -1577,7 +1583,7 @@ def run_conversation(
                     # interim assistant message is byte-identical to what
                     # would have been appended in the non-truncated path.
                     _trunc_msg = None
-                    _trunc_transport = agent._get_transport()
+                    _trunc_transport = agent._get_transport("chat_completions") if agent.api_mode == "local_cli" else agent._get_transport()
                     if agent.api_mode == "anthropic_messages":
                         _trunc_result = _trunc_transport.normalize_response(
                             response, strip_tool_prefix=agent._is_anthropic_oauth
@@ -3616,7 +3622,9 @@ def run_conversation(
             break
 
         try:
-            _transport = agent._get_transport()
+            # local_cli has no registered transport; use chat_completions transport
+            # since local_cli always returns an OpenAI-compatible SimpleNamespace.
+            _transport = agent._get_transport("chat_completions") if agent.api_mode == "local_cli" else agent._get_transport()
             _normalize_kwargs = {}
             if agent.api_mode == "anthropic_messages":
                 _normalize_kwargs["strip_tool_prefix"] = agent._is_anthropic_oauth

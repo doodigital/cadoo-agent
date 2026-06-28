@@ -206,6 +206,41 @@ def interruptible_api_call(agent, api_kwargs: dict):
                 )
             elif agent.api_mode == "anthropic_messages":
                 result["response"] = agent._anthropic_messages_create(api_kwargs)
+            elif agent.api_mode == "local_cli":
+                # Local CLI — spawn claude/gemini/codex as a subprocess.
+                from cadoo_cli.proxy.adapters.local_cli import call_local_cli
+                from types import SimpleNamespace
+                cli = getattr(agent, "_local_cli", None) or "claude"
+                model_hint = api_kwargs.get("model") or None
+                if model_hint in ("auto", "local-cli", ""):
+                    model_hint = None
+                raw = call_local_cli(
+                    cli,
+                    api_kwargs.get("messages", []),
+                    model=model_hint,
+                )
+                # Wrap in a SimpleNamespace that looks like an OpenAI response
+                choice = SimpleNamespace(
+                    message=SimpleNamespace(
+                        role="assistant",
+                        content=raw["choices"][0]["message"]["content"],
+                        tool_calls=None,
+                        function_call=None,
+                    ),
+                    finish_reason=raw["choices"][0]["finish_reason"],
+                    index=0,
+                )
+                result["response"] = SimpleNamespace(
+                    id=raw["id"],
+                    object="chat.completion",
+                    model=raw["model"],
+                    choices=[choice],
+                    usage=SimpleNamespace(
+                        prompt_tokens=0,
+                        completion_tokens=0,
+                        total_tokens=0,
+                    ),
+                )
             elif agent.api_mode == "bedrock_converse":
                 # Bedrock uses boto3 directly — no OpenAI client needed.
                 # normalize_converse_response produces an OpenAI-compatible
@@ -555,6 +590,10 @@ def interruptible_api_call(agent, api_kwargs: dict):
 def build_api_kwargs(agent, api_messages: list) -> dict:
     """Build the keyword arguments dict for the active API mode."""
     tools_for_api = agent.tools
+
+    # Local CLI — no API kwargs needed; the dispatch in _call() uses agent attrs.
+    if agent.api_mode == "local_cli":
+        return {"model": agent.model or "auto", "messages": api_messages}
 
     if agent.api_mode == "anthropic_messages":
         _transport = agent._get_transport()
@@ -1719,6 +1758,10 @@ def interruptible_streaming_api_call(agent, api_kwargs: dict, *, on_first_delta=
         if result["error"] is not None:
             raise result["error"]
         return result["response"]
+
+    # Local CLI — no real streaming; delegate to non-streaming path.
+    if agent.api_mode == "local_cli":
+        return agent._interruptible_api_call(api_kwargs)
 
     result = {"response": None, "error": None, "partial_tool_names": []}
     request_client_holder = {"client": None, "diag": None, "owner_tid": None}

@@ -427,6 +427,13 @@ PROVIDER_REGISTRY: Dict[str, ProviderConfig] = {
         api_key_env_vars=(),
         base_url_env_var="BEDROCK_BASE_URL",
     ),
+    "local-cli": ProviderConfig(
+        id="local-cli",
+        name="Local CLI",
+        auth_type="local_cli",
+        inference_base_url="http://local-cli.internal/v1",
+        api_key_env_vars=(),
+    ),
     "azure-foundry": ProviderConfig(
         id="azure-foundry",
         name="Azure Foundry",
@@ -1525,6 +1532,8 @@ def resolve_provider(
         "tencent": "tencent-tokenhub", "tokenhub": "tencent-tokenhub",
         "tencent-cloud": "tencent-tokenhub", "tencentmaas": "tencent-tokenhub",
         "aws": "bedrock", "aws-bedrock": "bedrock", "amazon-bedrock": "bedrock", "amazon": "bedrock",
+        "local-cli": "local-cli", "localcli": "local-cli", "claude-code": "local-cli",
+        "gemini-cli": "local-cli", "claudecode": "local-cli",
         "go": "opencode-go", "opencode-go-sub": "opencode-go",
         "kilo": "kilocode", "kilo-code": "kilocode", "kilo-gateway": "kilocode",
         "lmstudio": "lmstudio", "lm-studio": "lmstudio", "lm_studio": "lmstudio",

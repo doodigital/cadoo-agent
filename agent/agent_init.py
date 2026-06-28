@@ -314,7 +314,7 @@ def init_agent(
     agent.provider = provider_name or ""
     agent.acp_command = acp_command or command
     agent.acp_args = list(acp_args or args or [])
-    if api_mode in {"chat_completions", "codex_responses", "anthropic_messages", "bedrock_converse", "codex_app_server"}:
+    if api_mode in {"chat_completions", "codex_responses", "anthropic_messages", "bedrock_converse", "codex_app_server", "local_cli"}:
         agent.api_mode = api_mode
     elif agent.provider == "openai-codex":
         agent.api_mode = "codex_responses"
@@ -337,6 +337,16 @@ def init_agent(
         # use a URL convention ending in /anthropic. Auto-detect these so the
         # Anthropic Messages API adapter is used instead of chat completions.
         agent.api_mode = "anthropic_messages"
+    elif agent.provider == "local-cli" or api_mode == "local_cli":
+        agent.api_mode = "local_cli"
+        # Propagate the chosen CLI executable onto the agent so the dispatch
+        # in chat_completion_helpers can call the right binary.
+        _runtime_local_cli = getattr(agent, "_runtime", {})
+        if isinstance(_runtime_local_cli, dict):
+            agent._local_cli = _runtime_local_cli.get("local_cli", "claude")
+        else:
+            from cadoo_cli.proxy.adapters.local_cli import detect_available_cli
+            agent._local_cli = detect_available_cli() or "claude"
     elif agent.provider == "bedrock" or (
         agent._base_url_hostname.startswith("bedrock-runtime.")
         and base_url_host_matches(agent._base_url_lower, "amazonaws.com")

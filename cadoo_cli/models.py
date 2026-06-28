@@ -177,6 +177,27 @@ _PROVIDER_MODELS: dict[str, list[str]] = {
         # Modelo padrão — o gateway DooStudio decide qual LLM usar internamente
         "cadoo",
     ],
+    # Local CLI — model names are passed as --model hint to the CLI.
+    # "auto" means the CLI uses its own default model.
+    "local-cli": [
+        "auto",
+        # Claude (Anthropic / Claude Code)
+        "claude-sonnet-4-6",
+        "claude-sonnet-4-5",
+        "claude-opus-4-8",
+        "claude-opus-4-7",
+        "claude-haiku-4-5",
+        # Gemini (Gemini CLI)
+        "gemini-2.5-pro",
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite",
+        "gemini-3.5-pro",
+        "gemini-3.5-flash",
+        # OpenAI / Codex (via codex CLI)
+        "gpt-5",
+        "gpt-4.5",
+        "gpt-4o",
+    ],
     # Native OpenAI Chat Completions (api.openai.com). Used by /model counts and
     # provider_model_ids fallback when /v1/models is unavailable.
     "openai": [
@@ -967,6 +988,7 @@ class ProviderEntry(NamedTuple):
 
 CANONICAL_PROVIDERS: list[ProviderEntry] = [
     ProviderEntry("nous",           "DooStudio Portal",              "DooStudio Portal (Everything your agent needs, 300+ models with bundled tool use)"),
+    ProviderEntry("local-cli",      "Local CLI",                "Local CLI (claude, gemini, codex — usa o CLI instalado e autenticado, sem chave de API)"),
     ProviderEntry("openrouter",     "OpenRouter",               "OpenRouter (Pay-per-use API aggregator)"),
     ProviderEntry("novita",         "NovitaAI",                 "NovitaAI (Cloud: Model API, Agent Sandbox, GPU Cloud)"),
     ProviderEntry("lmstudio",       "LM Studio",                "LM Studio (Local desktop app with built-in model server)"),
