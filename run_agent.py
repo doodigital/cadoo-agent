@@ -3995,6 +3995,8 @@ class AIAgent:
             self._client_kwargs["default_headers"] = _codex_cloudflare_headers(
                 self._client_kwargs.get("api_key", "")
             )
+        elif base_url_host_matches(base_url, "doostudio.com.br"):
+            self._client_kwargs["default_headers"] = {"User-Agent": "CadooAgent/1.0 (cadoo-cli)"}
         else:
             # No URL-specific headers — check profile.default_headers before clearing.
             _ph_headers = None
