@@ -68,7 +68,7 @@ AUTH_LOCK_TIMEOUT_SECONDS = 15.0
 
 # DooStudio Portal defaults
 DEFAULT_NOUS_PORTAL_URL = "https://doostudio.com.br"
-DEFAULT_NOUS_INFERENCE_URL = "https://doostudio.com.br/api/cadoo_agent_gateway.php"
+DEFAULT_NOUS_INFERENCE_URL = "https://doostudio.com.br/api/cadoo/v1"
 DEFAULT_NOUS_CLIENT_ID = "cadoo-cli"
 NOUS_INFERENCE_INVOKE_SCOPE = "inference:invoke"
 NOUS_BILLING_MANAGE_SCOPE = "billing:manage"
