@@ -2927,15 +2927,34 @@ def run_setup_wizard(args):
         if migration_ran:
             config = load_config()
 
-        setup_mode = prompt_choice(
+        _setup_lang = (config.get("display") or {}).get("language", "en")
+        _setup_mode_strings = {
+            "pt": (
+                "Como você deseja configurar o Cadoo?",
+                [
+                    "Configuração Rápida (Portal DooStudio) — login OAuth gratuito, sem chaves de API, modelo + ferramentas (recomendado)",
+                    "Configuração Completa — configure cada provedor, ferramenta e opção você mesmo (traga suas próprias chaves)",
+                    "Configuração Mínima — tudo desativado exceto o essencial; ative cada recurso manualmente",
+                ],
+            ),
+            "es": (
+                "¿Cómo desea configurar Cadoo?",
+                [
+                    "Configuración Rápida (Portal DooStudio) — inicio OAuth gratuito, sin claves de API, modelo + herramientas (recomendado)",
+                    "Configuración Completa — configure cada proveedor, herramienta y opción usted mismo (traiga sus propias claves)",
+                    "Configuración Mínima — todo desactivado excepto lo esencial; active cada función manualmente",
+                ],
+            ),
+        }
+        _sm_question, _sm_choices = _setup_mode_strings.get(_setup_lang, (
             "How would you like to set up Cadoo?",
             [
                 "Quick Setup (DooStudio Portal) — free OAuth login, no API keys, model + tools (recommended)",
                 "Full setup — configure every provider, tool & option yourself (bring your own keys)",
                 "Blank Slate — everything off except the bare minimum; opt in to each capability",
             ],
-            0,
-        )
+        ))
+        setup_mode = prompt_choice(_sm_question, _sm_choices, 0)
 
         if setup_mode == 0:
             _run_first_time_quick_setup(config, cadoo_home, is_existing)
