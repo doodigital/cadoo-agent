@@ -47,6 +47,14 @@
   <td><b>🇧🇷 Roda em qualquer lugar</b><br>🇺🇸 Runs anywhere<br>🇪🇸 Corre en cualquier lugar</td>
   <td>🇧🇷 Local, Docker, SSH, Modal e mais. Rode num <a href="https://www.hostinger.com/br?REFERRALCODE=OW2ADRIANTJH">VPS</a> por poucos reais por mês.<br>🇺🇸 Local, Docker, SSH, Modal and more. Run it on a <a href="https://www.hostinger.com/br?REFERRALCODE=OW2ADRIANTJH">VPS</a> for nearly nothing when idle.<br>🇪🇸 Local, Docker, SSH, Modal y más. Córrelo en un <a href="https://www.hostinger.com/br?REFERRALCODE=OW2ADRIANTJH">VPS</a> por muy poco dinero al mes.</td>
 </tr>
+<tr>
+  <td><b>🇧🇷 Grátis ou local</b><br>🇺🇸 Free or fully local<br>🇪🇸 Gratis o totalmente local</td>
+  <td>🇧🇷 Use o Groq gratuitamente (llama-3.3-70b, gemma2-9b) ou rode local via Ollama com <code>cadoo setup-local</code> — detecta seu hardware e baixa o modelo ideal automaticamente.<br>🇺🇸 Use Groq for free (llama-3.3-70b, gemma2-9b) or run fully local via Ollama with <code>cadoo setup-local</code> — detects your hardware and downloads the right model tier.<br>🇪🇸 Usa Groq gratis (llama-3.3-70b, gemma2-9b) o corre local con Ollama usando <code>cadoo setup-local</code> — detecta tu hardware y descarga el modelo ideal.</td>
+</tr>
+<tr>
+  <td><b>🇧🇷 DooStudio — 50 ferramentas MCP</b><br>🇺🇸 DooStudio — 50 MCP tools<br>🇪🇸 DooStudio — 50 herramientas MCP</td>
+  <td>🇧🇷 Conecte ao DooStudio e ganhe 50 ferramentas MCP: CRM (leads, pipeline, propostas), Studio (conteúdo, playbook), Brain, Drive, Memória, Atende (WhatsApp: 1.400+ conversas) e Agenda — direto na conversa.<br>🇺🇸 Connect to DooStudio and unlock 50 MCP tools: CRM (leads, pipeline, proposals), Studio (content, playbook), Brain, Drive, Memory, Atende (WhatsApp: 1,400+ conversations) and Agenda — all in-conversation.<br>🇪🇸 Conecta DooStudio y obtén 50 herramientas MCP: CRM (leads, pipeline, propuestas), Studio (contenido, playbook), Brain, Drive, Memoria, Atende (WhatsApp: 1.400+ conversaciones) y Agenda.</td>
+</tr>
 </table>
 
 ---
@@ -106,10 +114,11 @@ Add-MpPreference -ExclusionPath "$env:LOCALAPPDATA\cadoo\bin"
 
 ```bash
 cadoo              # 🇧🇷 Iniciar conversa / 🇺🇸 Start a conversation / 🇪🇸 Iniciar conversación
+cadoo setup        # 🇧🇷 Assistente de configuração completo / 🇺🇸 Full setup wizard / 🇪🇸 Asistente de configuración completo
+cadoo setup-local  # 🇧🇷 Instalar modelo local via Ollama (gratuito) / 🇺🇸 Install local model via Ollama (free) / 🇪🇸 Instalar modelo local con Ollama (gratis)
 cadoo model        # 🇧🇷 Escolher modelo de IA / 🇺🇸 Choose your AI model / 🇪🇸 Elegir modelo de IA
 cadoo tools        # 🇧🇷 Configurar ferramentas / 🇺🇸 Configure tools / 🇪🇸 Configurar herramientas
 cadoo gateway      # 🇧🇷 Iniciar gateway (Telegram, Discord...) / 🇺🇸 Start messaging gateway / 🇪🇸 Iniciar gateway de mensajería
-cadoo setup        # 🇧🇷 Assistente de configuração completo / 🇺🇸 Full setup wizard / 🇪🇸 Asistente de configuración completo
 cadoo update       # 🇧🇷 Atualizar para a versão mais recente / 🇺🇸 Update to latest version / 🇪🇸 Actualizar a la última versión
 cadoo doctor       # 🇧🇷 Diagnosticar problemas / 🇺🇸 Diagnose issues / 🇪🇸 Diagnosticar problemas
 ```
