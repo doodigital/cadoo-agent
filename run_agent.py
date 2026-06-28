@@ -116,7 +116,7 @@ from agent.process_bootstrap import (
 from agent.iteration_budget import IterationBudget
 
 
-from cadoo_cli.env_loader import load_hermes_dotenv
+from cadoo_cli.env_loader import load_cadoo_dotenv
 from cadoo_cli.timeouts import (
     get_provider_request_timeout,
     get_provider_stale_timeout,
@@ -124,7 +124,7 @@ from cadoo_cli.timeouts import (
 
 _cadoo_home = get_cadoo_home()
 _project_env = Path(__file__).parent / '.env'
-_loaded_env_paths = load_hermes_dotenv(cadoo_home=_cadoo_home, project_env=_project_env)
+_loaded_env_paths = load_cadoo_dotenv(cadoo_home=_cadoo_home, project_env=_project_env)
 if _loaded_env_paths:
     for _env_path in _loaded_env_paths:
         logger.info("Loaded environment variables from %s", _env_path)

@@ -49,11 +49,11 @@ from cadoo_constants import OPENROUTER_BASE_URL, get_cadoo_home
 from agent.retry_utils import jittered_backoff
 
 # Load .env from CADOO_HOME first, then project root as a dev fallback.
-from cadoo_cli.env_loader import load_hermes_dotenv
+from cadoo_cli.env_loader import load_cadoo_dotenv
 
 _cadoo_home = get_cadoo_home()
 _project_env = Path(__file__).parent / ".env"
-load_hermes_dotenv(cadoo_home=_cadoo_home, project_env=_project_env)
+load_cadoo_dotenv(cadoo_home=_cadoo_home, project_env=_project_env)
 
 
 def _effective_temperature_for_model(

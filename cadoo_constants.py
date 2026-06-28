@@ -109,7 +109,7 @@ def get_cadoo_home() -> Path:
     return _get_platform_default_cadoo_home()
 
 
-def get_default_hermes_root() -> Path:
+def get_default_cadoo_root() -> Path:
     """Return the root Cadoo directory for profile-level operations.
 
     In standard deployments this is the platform-native Cadoo home

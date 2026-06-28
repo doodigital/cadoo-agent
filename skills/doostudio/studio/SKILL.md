@@ -1,21 +1,19 @@
 ---
 name: studio
-description: "DooStudio: CRM completo, clientes, playbooks, planejamento e conteúdo via MCP."
-version: 2.0.0
+description: "DooStudio: CRM, clientes, playbooks, brain, drive e memória do CaDoo via MCP."
+version: 3.0.0
 platforms: [linux, macos, windows]
 metadata:
   cadoo:
-    tags: [doostudio, studio, crm, leads, clientes, playbook, planejamento, conteudo, marketing, propostas, contratos, projetos, campanhas]
+    tags: [doostudio, studio, crm, leads, clientes, playbook, planejamento, conteudo, marketing, brain, drive, memoria]
     related_skills: [doostudio]
 ---
 
 # DooStudio — Agente Completo
 
-Acesso total ao DooStudio via MCP: CRM (leads, pipeline, propostas, orçamentos, contratos, projetos, campanhas, tarefas) + Studio (clientes, playbooks, planejamento, conteúdo, posts, pautas).
+Acesso total ao DooStudio via MCP: CRM + Studio + Brain + Drive + Memória do CaDoo (32 tools).
 
 ## Setup Automático
-
-Quando o MCP não estiver configurado, execute:
 
 ### Passo 1 — Verificar configuração
 
@@ -60,7 +58,7 @@ Chame `doostudio_info_usuario`. Se retornar o perfil, confirme e liste as opçõ
 
 ---
 
-## Ferramentas Disponíveis (21 tools)
+## Ferramentas Disponíveis (32 tools)
 
 ### Info
 | Tool | O que faz |
@@ -70,7 +68,7 @@ Chame `doostudio_info_usuario`. Se retornar o perfil, confirme e liste as opçõ
 ### CRM — Leads e Contatos
 | Tool | O que faz |
 |------|-----------|
-| `crm_listar_contatos` | Lista leads/contatos (626+) com busca por nome, email, telefone |
+| `crm_listar_contatos` | Lista leads/contatos (662+) com busca por nome, email, telefone |
 | `crm_contar_leads` | Conta total de leads, com filtro por status |
 
 ### CRM — Pipeline
@@ -82,16 +80,16 @@ Chame `doostudio_info_usuario`. Se retornar o perfil, confirme e liste as opçõ
 ### CRM — Negócios
 | Tool | O que faz |
 |------|-----------|
-| `crm_listar_propostas` | Lista propostas comerciais (41) |
-| `crm_listar_orcamentos` | Lista orçamentos (28) |
-| `crm_listar_contratos` | Lista contratos (26) |
+| `crm_listar_propostas` | Lista propostas comerciais |
+| `crm_listar_orcamentos` | Lista orçamentos |
+| `crm_listar_contratos` | Lista contratos |
 
 ### CRM — Operação
 | Tool | O que faz |
 |------|-----------|
-| `crm_listar_tarefas` | Lista tarefas (95) com filtro por status |
-| `crm_listar_projetos` | Lista projetos (8) |
-| `crm_listar_campanhas` | Lista campanhas (8) |
+| `crm_listar_tarefas` | Lista tarefas com filtro por status |
+| `crm_listar_projetos` | Lista projetos |
+| `crm_listar_campanhas` | Lista campanhas |
 
 ### CRM — Escrita
 | Tool | O que faz |
@@ -117,7 +115,30 @@ Chame `doostudio_info_usuario`. Se retornar o perfil, confirme e liste as opçõ
 | Tool | O que faz |
 |------|-----------|
 | `studio_listar_posts` | Lista posts publicados ou agendados |
-| `studio_listar_pautas` | Lista pautas de conteúdo |
+| `studio_listar_pautas` | Lista pautas de conteúdo (34+) |
+
+### 🧠 Brain
+| Tool | O que faz |
+|------|-----------|
+| `brain_contexto` | Injeta contexto do Brain no conversation window (blocos 📌 pinned em full) |
+| `brain_buscar` | Busca blocos de conhecimento por palavra-chave |
+| `brain_listar_pastas` | Lista pastas do Brain |
+| `brain_ler_pasta` | Lê todos os blocos de uma pasta |
+| `brain_ler_bloco` | Lê conteúdo completo de um bloco específico |
+| `brain_salvar_bloco` | Cria/atualiza bloco (auto-marca source: mcp) |
+
+### 📁 Drive
+| Tool | O que faz |
+|------|-----------|
+| `drive_listar` | Navega pastas e arquivos (admin/manager veem tudo) |
+| `drive_buscar` | Busca arquivos por nome |
+
+### 🤖 Memória do CaDoo
+| Tool | O que faz |
+|------|-----------|
+| `cadoo_minha_memoria` | 440+ fatos que o CaDoo aprendeu em conversas (busca por keyword) |
+| `cadoo_historico_chats` | 54+ conversas com título, data e quantidade de mensagens |
+| `cadoo_ler_chat` | Mensagens completas de uma conversa específica |
 
 ---
 
@@ -136,14 +157,19 @@ Chame `doostudio_info_usuario`. Se retornar o perfil, confirme e liste as opçõ
 2. `studio_planning_monthly(client_id=X, month="2026-07")` por cliente
 3. Apresentar agrupado por status
 
+### "O que o CaDoo sabe sobre o cliente X?"
+1. `cadoo_minha_memoria(query="X")` — fatos conhecidos
+2. `studio_playbook_get(client_id=...)` — playbook completo
+
 ### "Crie conteúdo para o cliente X"
 1. `studio_listar_clientes` — obter client_id
 2. `studio_playbook_get(client_id=X)` — consultar tom de voz e diretrizes
 3. `studio_content_create(...)` com os dados
 
-### "Tenho propostas abertas?"
-1. `crm_listar_propostas` — listar com status/valor
-2. Destacar valor total do pipeline comercial
+### "O que foi discutido sobre Y?"
+1. `cadoo_minha_memoria(query="Y")` — fatos extraídos
+2. `cadoo_historico_chats` — ver conversas com título relevante
+3. `cadoo_ler_chat(chat_id=...)` — ler conversa completa
 
 ---
 
@@ -151,7 +177,8 @@ Chame `doostudio_info_usuario`. Se retornar o perfil, confirme e liste as opçõ
 
 - **Proativo**: após listar leads, ofereça criar tarefa de follow-up; após listar clientes, ofereça ver planejamento
 - **Contextual**: ao criar conteúdo, sempre consulte o playbook primeiro
-- **Números reais**: leads vêm de `crm_customers` (626+), não de perfis comportamentais
+- **Memória**: use `cadoo_minha_memoria` para contexto sobre clientes, projetos e preferências
+- **Números reais**: leads vêm de `crm_customers` (662+), não de perfis comportamentais
 - **Paginação**: quando houver mais registros, informe e pergunte se quer ver mais
 - **Idioma**: português por padrão
 - **Erros 401/403**: API Key pode ter expirado — execute o setup novamente
