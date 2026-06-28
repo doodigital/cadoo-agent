@@ -780,6 +780,8 @@ def init_agent(
             elif base_url_host_matches(effective_base, "chatgpt.com"):
                 from agent.auxiliary_client import _codex_cloudflare_headers
                 client_kwargs["default_headers"] = _codex_cloudflare_headers(api_key)
+            elif base_url_host_matches(effective_base, "doostudio.com.br"):
+                client_kwargs["default_headers"] = {"User-Agent": "CadooAgent/1.0 (cadoo-cli)"}
             elif "default_headers" not in client_kwargs:
                 # Fall back to profile.default_headers for providers that
                 # declare custom headers (e.g. Kimi User-Agent on non-kimi.com

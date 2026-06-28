@@ -140,6 +140,8 @@ def create_app(adapter: UpstreamAdapter) -> "web.Application":
 
             fwd_headers = _filter_request_headers(request.headers)
             fwd_headers["Authorization"] = f"{active_cred.token_type} {active_cred.bearer}"
+            # Always stamp our own User-Agent so Cloudflare doesn't block SDK clients
+            fwd_headers["User-Agent"] = "CadooAgent/1.0 (cadoo-cli)"
 
             logger.debug(
                 "proxy: forwarding %s %s -> %s (body=%d bytes)",
