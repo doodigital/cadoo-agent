@@ -332,7 +332,6 @@ TIPS = [
     "File paths pasted with quotes or escaped spaces are handled automatically — no manual cleanup needed.",
     "Slash commands never trigger the large-paste collapse — /command with big arguments works correctly.",
     "In interrupt mode, slash commands typed during agent execution bypass interrupt logic and run immediately.",
-    "HERMES_DEV=1 bypasses container mode detection for local development.",
     "Each MCP server gets its own toolset (mcp-servername) that can be toggled independently via cadoo tools.",
     "MCP ${ENV_VAR} placeholders in config are resolved at server spawn — including vars from ~/.cadoo/.env.",
     "Skills from trusted repos (DooStudio) get a 'trusted' security level; community skills get extra scanning.",
