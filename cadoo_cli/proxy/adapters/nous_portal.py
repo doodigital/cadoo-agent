@@ -35,6 +35,8 @@ _ALLOWED_PATHS: FrozenSet[str] = frozenset(
         "/completions",
         "/embeddings",
         "/models",
+        "/api/cadoo/v1/chat/completions",
+        "/api/cadoo/v1/models",
         "/api/cadoo_agent_gateway.php",
     }
 )
