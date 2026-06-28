@@ -1,7 +1,7 @@
 ---
 name: studio
-description: "DooStudio: CRM, Studio, Brain, Drive, Memória, Atende (WhatsApp) via MCP."
-version: 4.0.0
+description: "DooStudio: CRM, Studio, Brain, Drive, Memória, Atende (WhatsApp), Agenda via MCP."
+version: 4.1.0
 platforms: [linux, macos, windows]
 metadata:
   cadoo:
@@ -11,7 +11,7 @@ metadata:
 
 # DooStudio — Agente Completo
 
-Acesso total ao DooStudio via MCP: CRM + Studio + Brain + Drive + Memória + Atende (WhatsApp) — **47 tools**.
+Acesso total ao DooStudio via MCP: CRM + Studio + Brain + Drive + Memória + Atende (WhatsApp) + Agenda — **50 tools**.
 
 ## Setup Automático
 
@@ -58,7 +58,7 @@ Chame `doostudio_info_usuario`. Se retornar o perfil, confirme e liste as opçõ
 
 ---
 
-## Ferramentas Disponíveis (47 tools)
+## Ferramentas Disponíveis (50 tools)
 
 ### Info
 | Tool | O que faz |
@@ -171,6 +171,13 @@ Chame `doostudio_info_usuario`. Se retornar o perfil, confirme e liste as opçõ
 | `atende_ticket_fechar` | Fecha um ticket |
 | `atende_onboarding` | Lista projetos de onboarding com etapas e status |
 
+### Agenda
+| Tool | O que faz |
+|------|-----------|
+| `agenda_hoje` | Compromissos do dia do usuário autenticado (sem parâmetros) |
+| `agenda_listar` | Lista compromissos com filtros de data (date_from, date_to) e status |
+| `agenda_criar` | Cria compromisso (título + start_time obrigatórios, demais opcionais) |
+
 ---
 
 ## Workflows
@@ -198,12 +205,25 @@ Chame `doostudio_info_usuario`. Se retornar o perfil, confirme e liste as opçõ
 3. `atende_ler_mensagens(conversation_id=...)` — ler histórico de uma conversa
 
 ### "Enviar mensagem para o cliente X"
-1. `atende_listar_conversas(search="nome")` — localizar conversa
-2. `atende_enviar_mensagem(...)` — enviar texto ou mídia
+1. `atende_listar_conversas(search="nome")` — localizar conversa e obter `conversation_id`
+2. `atende_listar_instancias` — obter o **id numérico** da instância (ex: `13`, `12`, `14`)
+3. `atende_ler_mensagens(conversation_id=...)` — ler últimas msgs para entender contexto e tom antes de responder
+4. `atende_enviar_mensagem(instance_id=<id_numerico>, phone=..., message=...)` — enviar
+
+**PITFALL CRITICO**: `atende_enviar_mensagem` exige `instance_id` como **inteiro numérico** (ex: `13`),
+NÃO a string `"doost_adriano_pessoal_1_1779819328"` que aparece no campo `instance_id` de `atende_listar_conversas`.
+Sempre chame `atende_listar_instancias` para obter o campo `id` numérico correto antes de enviar.
 
 ### "Mover lead para próximo estágio no Atende"
 1. `atende_kanban_estagios` — ver estágios disponíveis
 2. `atende_kanban_mover(conversation_id=..., estagio=...)` — mover
+
+### "Quais meus compromissos de hoje / desta semana?"
+1. `agenda_hoje` — compromissos do dia
+2. Ou `agenda_listar(date_from="2026-06-28", date_to="2026-07-04")` — período específico
+
+### "Agendar reunião com o cliente X"
+1. `agenda_criar(title="Reunião X", start_time="2026-07-02T14:00:00")` — criar compromisso
 
 ### "O que foi discutido sobre Y?"
 1. `cadoo_minha_memoria(query="Y")` — fatos extraídos
@@ -221,3 +241,5 @@ Chame `doostudio_info_usuario`. Se retornar o perfil, confirme e liste as opçõ
 - **Paginação**: quando houver mais registros, informe e pergunte se quer ver mais
 - **Idioma**: português por padrão
 - **Erros 401/403**: API Key pode ter expirado — execute o setup novamente
+- **Google Calendar / Agenda**: o MCP DooStudio NÃO tem acesso a agenda/calendário. Para isso, usar `google-workspace` skill (gws CLI) ou configurar um MCP separado de Google Calendar.
+- **instance_id numérico vs string**: `atende_listar_conversas` retorna `instance_id` como string (ex: `"doost_adriano_pessoal_1_1779819328"`). O `atende_enviar_mensagem` precisa do `id` numérico da instância (ex: `13`). São campos diferentes — sempre use `atende_listar_instancias` para obter o numérico.
