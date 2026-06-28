@@ -397,7 +397,7 @@ def _compute_tool_definitions(
         for toolset_name in disabled_toolsets:
             if validate_toolset(toolset_name):
                 if toolset_name.startswith("cadoo-"):
-                    # Platform bundles (cadoo-*) include _HERMES_CORE_TOOLS, so
+                    # Platform bundles (cadoo-*) include _CADOO_CORE_TOOLS, so
                     # subtracting the whole bundle would strip core tools shared
                     # by other enabled toolsets and empty the tool list (#33924).
                     # Subtract only the bundle's non-core delta; keep core.
@@ -532,7 +532,7 @@ def _compute_tool_definitions(
     # Conditionally replace MCP + plugin (non-core) tools with three bridge
     # tools (tool_search / tool_describe / tool_call) when the deferrable
     # surface exceeds the configured threshold (default 10% of context
-    # window). Core Cadoo tools (toolsets._HERMES_CORE_TOOLS) are NEVER
+    # window). Core Cadoo tools (toolsets._CADOO_CORE_TOOLS) are NEVER
     # deferred. See tools/tool_search.py for full design notes.
     #
     # This is deliberately the last step before returning — sanitization

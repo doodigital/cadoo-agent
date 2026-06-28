@@ -19,8 +19,8 @@ def _cadoo_home_path() -> Path:
 def _hermes_root_path() -> Path:
     """Resolve the Cadoo root dir (always the parent of any profile, never per-profile)."""
     try:
-        from cadoo_constants import get_default_hermes_root  # local import to avoid cycles
-        return get_default_hermes_root()
+        from cadoo_constants import get_default_cadoo_root  # local import to avoid cycles
+        return get_default_cadoo_root()
     except Exception:
         return Path(os.path.expanduser("~/.cadoo"))
 
