@@ -298,9 +298,9 @@ TIPS = [
     "Any website can expose skills via /.well-known/skills/index.json — the skills hub discovers them automatically.",
     "The skills audit log at ~/.cadoo/skills/.hub/audit.log tracks every install and removal operation.",
     "Stale git worktrees are auto-cleaned: 24-72h old with no unpushed commits get pruned on startup.",
-    "Profiles scope Cadoo state via CADOO_HOME; host tool subprocesses keep your real HOME unless terminal.home_mode is profile.",
-    "CADOO_HOME_MODE env var (octal, e.g. 0701) sets custom directory permissions for web server traversal.",
-    "Container mode: place .container-mode in CADOO_HOME and the host CLI auto-execs into the container.",
+    "Profiles scope Cadoo state via HERMES_HOME; host tool subprocesses keep your real HOME unless terminal.home_mode is profile.",
+    "HERMES_HOME_MODE env var (octal, e.g. 0701) sets custom directory permissions for web server traversal.",
+    "Container mode: place .container-mode in HERMES_HOME and the host CLI auto-execs into the container.",
     "Ctrl+C has 5 priority tiers: cancel recording → cancel prompts → cancel picker → interrupt agent → exit.",
     "Every interrupt during an agent run is logged to ~/.cadoo/interrupt_debug.log with timestamps.",
     "BROWSER_CDP_URL connects browser tools to any running Chromium-family browser — accepts WebSocket, HTTP, or host:port.",
@@ -439,7 +439,7 @@ TIPS = [
     'cadoo status --deep runs the full health sweep across every component; plain cadoo status is the quick view.',
 
     # --- Agent Behavior Env Vars ---
-    'CADOO_AGENT_TIMEOUT=0 disables the gateway inactivity kill for a running agent — use for long research runs.',
+    'HERMES_AGENT_TIMEOUT=0 disables the gateway inactivity kill for a running agent — use for long research runs.',
     'HERMES_ENABLE_PROJECT_PLUGINS=1 auto-loads repo-local plugins from ./.cadoo/plugins/ — trust-gated by design.',
     "HERMES_DISABLE_FILE_STATE_GUARD=1 turns off the 'file changed since you read it' guard on patch and write_file.",
     'HERMES_ALLOW_PRIVATE_URLS=true lets web tools hit localhost and private networks — off by default in gateway mode.',
@@ -451,7 +451,7 @@ TIPS = [
 
     # --- Gateway Behavior Env Vars ---
     'HERMES_GATEWAY_BUSY_ACK_ENABLED=false silences the ⚡/⏳/⏩ ack messages when a user messages a busy agent.',
-    'CADOO_AGENT_NOTIFY_INTERVAL (default 180s) sets how often the gateway pings with progress on long turns.',
+    'HERMES_AGENT_NOTIFY_INTERVAL (default 180s) sets how often the gateway pings with progress on long turns.',
     'HERMES_RESTART_DRAIN_TIMEOUT (default 900s) caps how long /restart waits for in-flight runs before forcing.',
     'HERMES_CHECKPOINT_TIMEOUT (default 30s) caps filesystem checkpoint creation — raise it on huge monorepos.',
 
