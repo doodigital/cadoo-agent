@@ -12119,6 +12119,12 @@ class CadooCLI(CLIAgentSetupMixin, CLICommandsMixin):
         # isn't a TTY-capable stream. Honors NO_COLOR/dumb terminals by
         # skipping silently when there's no real console.
         self._clear_terminal_on_exit()
+        # Always show goodbye
+        try:
+            from cadoo_cli.skin_engine import get_active_goodbye
+            print(get_active_goodbye("Até logo! 🟣"))
+        except Exception:
+            print("Até logo! 🟣")
         print()
         msg_count = len(self.conversation_history)
         if msg_count > 0:
@@ -12165,13 +12171,6 @@ class CadooCLI(CLIAgentSetupMixin, CLICommandsMixin):
                 print(f"Title:          {session_title}")
             print(f"Duration:       {duration_str}")
             print(f"Messages:       {msg_count} ({user_msgs} user, {tool_calls} tool calls)")
-        else:
-            try:
-                from cadoo_cli.skin_engine import get_active_goodbye
-                goodbye = get_active_goodbye("Goodbye! ⚕")
-            except Exception:
-                goodbye = "Goodbye! ⚕"
-            print(goodbye)
 
     def _get_tui_prompt_symbols(self) -> tuple[str, str]:
         """Return ``(normal_prompt, state_suffix)`` for the active skin.

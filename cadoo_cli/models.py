@@ -174,14 +174,8 @@ def _xai_curated_models() -> list[str]:
 
 _PROVIDER_MODELS: dict[str, list[str]] = {
     "nous": [
-        # Google Gemini via DooStudio Portal (Vertex AI)
-        "gemini-2.5-pro",
-        "gemini-2.5-flash",
-        "gemini-3-pro-preview",
-        "gemini-3.1-pro-preview",
-        "gemini-3.5-flash",
-        "gemini-3.1-flash",
-        "gemini-3.1-flash-lite-preview",
+        # Modelo padrão — o gateway DooStudio decide qual LLM usar internamente
+        "cadoo",
     ],
     # Native OpenAI Chat Completions (api.openai.com). Used by /model counts and
     # provider_model_ids fallback when /v1/models is unavailable.
