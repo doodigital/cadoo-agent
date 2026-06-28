@@ -10,7 +10,7 @@ upstream credential to the forwarded request. The credential is refreshed
 automatically when it approaches expiry.
 
 First-class adapter:
-  - ``nous`` — DooStudio Portal (https://inference-api.doostudio.io/v1)
+  - ``nous`` — DooStudio Portal (https://inference-api.doostudio.com.br/v1)
 
 Future adapters can plug in by implementing ``UpstreamAdapter``.
 """

@@ -32,7 +32,7 @@ import urllib.parse
 import urllib.request
 from typing import Any, Optional
 
-DEFAULT_PORTAL_BASE_URL = "https://doostudio.io/portal"
+DEFAULT_PORTAL_BASE_URL = "https://doostudio.com.br/portal"
 
 # Default HTTP timeout (seconds). Charge/poll calls are quick; keep this tight so
 # a hung portal doesn't freeze the TUI.

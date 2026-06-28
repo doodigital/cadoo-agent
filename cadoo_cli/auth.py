@@ -116,12 +116,12 @@ QWEN_ACCESS_TOKEN_REFRESH_SKEW_SECONDS = 120
 DEFAULT_SPOTIFY_ACCOUNTS_BASE_URL = "https://accounts.spotify.com"
 DEFAULT_SPOTIFY_API_BASE_URL = "https://api.spotify.com/v1"
 DEFAULT_SPOTIFY_REDIRECT_URI = "http://127.0.0.1:43827/spotify/callback"
-SPOTIFY_DOCS_URL = "https://doostudio.io/cadoo/docs/user-guide/features/spotify"
+SPOTIFY_DOCS_URL = "https://doostudio.com.br/cadoo/docs/user-guide/features/spotify"
 SPOTIFY_DASHBOARD_URL = "https://developer.spotify.com/dashboard"
 SPOTIFY_ACCESS_TOKEN_REFRESH_SKEW_SECONDS = 120
 
-XAI_OAUTH_DOCS_URL = "https://doostudio.io/cadoo/docs/guides/xai-grok-oauth"
-OAUTH_OVER_SSH_DOCS_URL = "https://doostudio.io/cadoo/docs/guides/oauth-over-ssh"
+XAI_OAUTH_DOCS_URL = "https://doostudio.com.br/cadoo/docs/guides/xai-grok-oauth"
+OAUTH_OVER_SSH_DOCS_URL = "https://doostudio.com.br/cadoo/docs/guides/oauth-over-ssh"
 DEFAULT_SPOTIFY_SCOPE = " ".join((
     "user-modify-playback-state",
     "user-read-playback-state",
@@ -1689,7 +1689,7 @@ def _optional_base_url(value: Any) -> Optional[str]:
 # dev/staging escape hatch and the env source is already trusted (the
 # user set it themselves).
 _ALLOWED_NOUS_INFERENCE_HOSTS: FrozenSet[str] = frozenset({
-    "inference-api.doostudio.io",
+    "inference-api.doostudio.com.br",
 })
 
 
@@ -5795,7 +5795,7 @@ def _snapshot_nous_pool_status() -> Dict[str, Any]:
 
 # ── Process-level memo for get_nous_auth_status() ──
 # get_nous_auth_status() validates state by calling resolve_nous_runtime_credentials(),
-# which does a synchronous OAuth refresh POST to doostudio.io/portal. That can take
+# which does a synchronous OAuth refresh POST to doostudio.com.br/portal. That can take
 # ~350ms even on the failure path, and read-only UI surfaces (`cadoo tools`, status panels,
 # subscription-feature checks) call it many times per render — `cadoo tools` → "All Platforms"
 # was firing the refresh ~31× during one menu paint, racking up >13s of HTTP and burning

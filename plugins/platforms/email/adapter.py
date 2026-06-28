@@ -141,7 +141,7 @@ def _send_imap_id(imap: "imaplib.IMAP4") -> None:
             "ID",
             f'("name" "cadoo" "version" "{_hermes_version}" '
             '"vendor" "DooStudio" '
-            '"support-email" "noreply@doostudio.io")',
+            '"support-email" "noreply@doostudio.com.br")',
         )
     except Exception as e:  # noqa: BLE001 — best-effort, never fatal
         logger.debug("[Email] IMAP ID command not accepted: %s", e)

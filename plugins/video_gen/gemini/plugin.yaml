@@ -1,0 +1,7 @@
+name: gemini
+version: 1.0.0
+description: "Google Veo 3 video generation via Gemini API (text-to-video, image-to-video, with audio)."
+author: DooStudio
+kind: backend
+requires_env:
+  - GEMINI_API_KEY

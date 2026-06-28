@@ -263,13 +263,29 @@ _reveal_timestamps: List[float] = []
 _REVEAL_MAX_PER_WINDOW = 5
 _REVEAL_WINDOW_SECONDS = 30
 
-# CORS: restrict to localhost origins only.  The web UI is intended to run
-# locally; binding to 0.0.0.0 with allow_origins=["*"] would let any website
-# read/modify config and secrets.
+# CORS: restrict to localhost origins by default.  The web UI is intended to
+# run locally; binding to 0.0.0.0 with allow_origins=["*"] would let any
+# website read/modify config and secrets.
+#
+# CADOO_DASHBOARD_TRUSTED_HOSTS — comma-separated extra IPs/hosts that are
+# treated as trusted (no auth required, CORS allowed).  Intended for VPN or
+# LAN access, e.g.:  CADOO_DASHBOARD_TRUSTED_HOSTS=100.95.93.45
+_extra_trusted_hosts: list = [
+    h.strip()
+    for h in os.environ.get("CADOO_DASHBOARD_TRUSTED_HOSTS", "").split(",")
+    if h.strip()
+]
+
+def _build_cors_origin_regex() -> str:
+    base = r"localhost|127\.0\.0\.1"
+    if _extra_trusted_hosts:
+        extras = "|".join(re.escape(h) for h in _extra_trusted_hosts)
+        base = f"{base}|{extras}"
+    return rf"^https?://({base})(:\d+)?$"
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
+    allow_origin_regex=_build_cors_origin_regex(),
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -361,9 +377,9 @@ def _require_token(request: Request) -> None:
 # checks because the browser now considers evil.test and our dashboard
 # "same origin". Validating the Host header at the app layer rejects any
 # request whose Host isn't one we bound for. See GHSA-ppp5-vxwm-4cf7.
-_LOOPBACK_HOST_VALUES: frozenset = frozenset({
-    "localhost", "127.0.0.1", "::1",
-})
+_LOOPBACK_HOST_VALUES: frozenset = frozenset(
+    {"localhost", "127.0.0.1", "::1"} | set(_extra_trusted_hosts)
+)
 
 
 def should_require_auth(host: str, allow_public: bool = False) -> bool:
@@ -2214,7 +2230,7 @@ async def get_portal_status():
         "portal_url": auth.get("portal_base_url"),
         "inference_url": auth.get("inference_base_url"),
         "provider": str((model_cfg or {}).get("provider") or ""),
-        "subscription_url": "https://doostudio.io/portal/manage-subscription",
+        "subscription_url": "https://doostudio.com.br/portal/manage-subscription",
         "features": features,
     }
 
@@ -4451,7 +4467,7 @@ _PLATFORM_OVERRIDES: dict[str, dict[str, Any]] = {
     "email": {
         "name": "Email",
         "description": "Talk to Cadoo through an IMAP/SMTP mailbox.",
-        "docs_url": "https://doostudio.io/cadoo/docs/user-guide/messaging/",
+        "docs_url": "https://doostudio.com.br/cadoo/docs/user-guide/messaging/",
         "env_vars": (
             "EMAIL_ADDRESS",
             "EMAIL_PASSWORD",
@@ -4518,7 +4534,7 @@ _PLATFORM_OVERRIDES: dict[str, dict[str, Any]] = {
     "weixin": {
         "name": "Weixin / WeChat (Personal)",
         "description": "Connect a personal WeChat account through Tencent's iLink Bot API.",
-        "docs_url": "https://doostudio.io/cadoo/docs/user-guide/messaging/weixin/",
+        "docs_url": "https://doostudio.com.br/cadoo/docs/user-guide/messaging/weixin/",
         "env_vars": ("WEIXIN_ACCOUNT_ID", "WEIXIN_TOKEN", "WEIXIN_BASE_URL"),
         "required_env": ("WEIXIN_ACCOUNT_ID", "WEIXIN_TOKEN"),
     },
@@ -4549,7 +4565,7 @@ _PLATFORM_OVERRIDES: dict[str, dict[str, Any]] = {
     "api_server": {
         "name": "API server",
         "description": "Expose Cadoo as an OpenAI-compatible HTTP API for tools like Open WebUI.",
-        "docs_url": "https://doostudio.io/cadoo/docs/user-guide/messaging/",
+        "docs_url": "https://doostudio.com.br/cadoo/docs/user-guide/messaging/",
         "env_vars": (
             "API_SERVER_ENABLED",
             "API_SERVER_KEY",
@@ -4562,7 +4578,7 @@ _PLATFORM_OVERRIDES: dict[str, dict[str, Any]] = {
     "webhook": {
         "name": "Webhooks",
         "description": "Receive events from GitHub, GitLab, and other webhook sources.",
-        "docs_url": "https://doostudio.io/cadoo/docs/user-guide/messaging/webhooks/",
+        "docs_url": "https://doostudio.com.br/cadoo/docs/user-guide/messaging/webhooks/",
         "env_vars": ("WEBHOOK_ENABLED", "WEBHOOK_PORT", "WEBHOOK_SECRET"),
         "required_env": (),
     },
@@ -5041,7 +5057,7 @@ def _write_platform_enabled(platform_id: str, enabled: bool) -> None:
     write_platform_config_field(platform_id, "enabled", enabled)
 
 
-_TELEGRAM_ONBOARDING_DEFAULT_URL = "https://setup.doostudio.io/cadoo"
+_TELEGRAM_ONBOARDING_DEFAULT_URL = "https://setup.doostudio.com.br/cadoo"
 _TELEGRAM_ONBOARDING_USER_AGENT = f"HermesDashboard/{__version__}"
 _TELEGRAM_USER_ID_RE = re.compile(r"^\d+$")
 
@@ -5698,7 +5714,7 @@ _OAUTH_PROVIDER_CATALOG: tuple[Dict[str, Any], ...] = (
         "name": "DooStudio Portal",
         "flow": "device_code",
         "cli_command": "cadoo auth add nous",
-        "docs_url": "https://doostudio.io/portal",
+        "docs_url": "https://doostudio.com.br/portal",
         "status_fn": None,  # dispatched via auth.get_nous_auth_status
     },
     {
@@ -5738,7 +5754,7 @@ _OAUTH_PROVIDER_CATALOG: tuple[Dict[str, Any], ...] = (
         # lands back on the loopback listener — no code to copy/paste.
         "flow": "loopback",
         "cli_command": "cadoo auth add xai-oauth",
-        "docs_url": "https://doostudio.io/cadoo/docs/guides/xai-grok-oauth",
+        "docs_url": "https://doostudio.com.br/cadoo/docs/guides/xai-grok-oauth",
         "status_fn": None,  # dispatched via auth.get_xai_oauth_auth_status
     },
     {

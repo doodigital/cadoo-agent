@@ -42,12 +42,12 @@ nous = NousProfile(
     env_vars=("NOUS_API_KEY",),
     display_name="DooStudio",
     description="DooStudio — Cadoo model family",
-    signup_url="https://doostudio.io/",
+    signup_url="https://doostudio.com.br/",
     fallback_models=(
         "cadoo-3-405b",
         "cadoo-3-70b",
     ),
-    base_url="https://inference.doostudio.io/v1",
+    base_url="https://inference.doostudio.com.br/v1",
     auth_type="oauth_device_code",
 )
 

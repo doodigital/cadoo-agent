@@ -3521,7 +3521,7 @@ def check_for_skill_updates(
 # Cadoo centralized index source
 # ---------------------------------------------------------------------------
 
-HERMES_INDEX_URL = "https://doostudio.io/cadoo/docs/api/skills-index.json"
+HERMES_INDEX_URL = "https://doostudio.com.br/cadoo/docs/api/skills-index.json"
 HERMES_INDEX_CACHE_FILE = INDEX_CACHE_DIR / "cadoo-index.json"
 HERMES_INDEX_TTL = 6 * 3600  # 6 hours
 

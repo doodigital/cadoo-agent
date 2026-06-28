@@ -1,0 +1,7 @@
+name: gemini
+version: 1.0.0
+description: "Google Gemini Imagen 3 image generation backend (text-to-image, image-to-image)."
+author: DooStudio
+kind: backend
+requires_env:
+  - GEMINI_API_KEY
