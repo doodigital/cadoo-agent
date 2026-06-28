@@ -9,8 +9,8 @@ Outputs:
                                     comments separating files.
 
 Both publish at:
-  https://doostudio.io/cadoo/docs/llms.txt
-  https://doostudio.io/cadoo/docs/llms-full.txt
+  https://doostudio.com.br/cadoo/docs/llms.txt
+  https://doostudio.com.br/cadoo/docs/llms-full.txt
 
 The `/docs/` prefix is not a mistake — Docusaurus serves `website/static/`
 at the `docs/` base path. Clients and IDE plugins that probe the classic
@@ -31,7 +31,7 @@ WEBSITE = SCRIPT_DIR.parent
 DOCS = WEBSITE / "docs"
 STATIC = WEBSITE / "static"
 
-SITE_BASE = "https://doostudio.io/cadoo/docs"
+SITE_BASE = "https://doostudio.com.br/cadoo/docs"
 
 # Curated sections for llms.txt — mirrors the product story, not the filesystem.
 # Each entry: (docs-relative path without .md, display title, optional short desc).
@@ -248,8 +248,8 @@ def emit_llms_full() -> str:
             "Started, Using Cadoo, Features, Messaging, Integrations, Guides, "
             "Developer Guide, Reference, then everything else.\n"
         ),
-        "Canonical site: https://doostudio.io/cadoo/docs\n",
-        "Short index: https://doostudio.io/cadoo/docs/llms.txt\n",
+        "Canonical site: https://doostudio.com.br/cadoo/docs\n",
+        "Short index: https://doostudio.com.br/cadoo/docs/llms.txt\n",
         "\n---\n\n",
     ]
 

@@ -4872,7 +4872,7 @@ class AIAgent:
         Some providers/routes reject `reasoning` with 400s, so gate it to
         known reasoning-capable model families and direct DooStudio Portal.
         """
-        if base_url_host_matches(self._base_url_lower, "doostudio.io"):
+        if base_url_host_matches(self._base_url_lower, "doostudio.com.br"):
             return True
         if (
             base_url_host_matches(self._base_url_lower, "models.github.ai")

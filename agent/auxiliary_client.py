@@ -382,7 +382,7 @@ _PROVIDERS_WITHOUT_VISION: frozenset = frozenset({
 # `X-Title` is the canonical attribution header OpenRouter's dashboard
 # reads; the previous `X-OpenRouter-Title` label was not recognized there.
 _OR_HEADERS_BASE = {
-    "HTTP-Referer": "https://doostudio.io/cadoo",
+    "HTTP-Referer": "https://doostudio.com.br/cadoo",
     "X-Title": "Cadoo Agent",
     "X-OpenRouter-Categories": "productivity,cli-agent",
 }
@@ -519,7 +519,7 @@ auxiliary_is_nous: bool = False
 # Default auxiliary models per provider
 _OPENROUTER_MODEL = "google/gemini-3-flash-preview"
 _NOUS_MODEL = "google/gemini-3-flash-preview"
-_NOUS_DEFAULT_BASE_URL = "https://inference-api.doostudio.io/v1"
+_NOUS_DEFAULT_BASE_URL = "https://inference-api.doostudio.com.br/v1"
 _ANTHROPIC_DEFAULT_BASE_URL = "https://api.anthropic.com"
 _AUTH_JSON_PATH = get_cadoo_home() / "auth.json"
 
@@ -2796,7 +2796,7 @@ def _recoverable_pool_provider(
         return "openai-codex"
     if base_url_host_matches(base, "openrouter.ai"):
         return "openrouter"
-    if base_url_host_matches(base, "inference-api.doostudio.io"):
+    if base_url_host_matches(base, "inference-api.doostudio.com.br"):
         return "nous"
     if base_url_host_matches(base, "api.anthropic.com"):
         return "anthropic"
@@ -5479,7 +5479,7 @@ def call_llm(
         # known-good default). Only applies to Nous-routed calls.
         _heal_is_nous = (
             resolved_provider == "nous"
-            or base_url_host_matches(_base_info, "inference-api.doostudio.io")
+            or base_url_host_matches(_base_info, "inference-api.doostudio.com.br")
         )
         if _is_model_not_found_error(first_err) and _heal_is_nous:
             healed_model = _refresh_nous_recommended_model(
@@ -5500,7 +5500,7 @@ def call_llm(
         # ── Nous auth refresh parity with main agent ──────────────────
         client_is_nous = (
             resolved_provider == "nous"
-            or base_url_host_matches(_base_info, "inference-api.doostudio.io")
+            or base_url_host_matches(_base_info, "inference-api.doostudio.com.br")
         )
         if (
             _is_payment_error(first_err)
@@ -5960,7 +5960,7 @@ async def async_call_llm(
         # fresh Portal fetch and retry once with the current recommendation.
         _heal_is_nous = (
             resolved_provider == "nous"
-            or base_url_host_matches(_client_base, "inference-api.doostudio.io")
+            or base_url_host_matches(_client_base, "inference-api.doostudio.com.br")
         )
         if _is_model_not_found_error(first_err) and _heal_is_nous:
             healed_model = _refresh_nous_recommended_model(
@@ -5981,7 +5981,7 @@ async def async_call_llm(
         # ── Nous auth refresh parity with main agent ──────────────────
         client_is_nous = (
             resolved_provider == "nous"
-            or base_url_host_matches(_client_base, "inference-api.doostudio.io")
+            or base_url_host_matches(_client_base, "inference-api.doostudio.com.br")
         )
         if (
             _is_payment_error(first_err)

@@ -134,7 +134,7 @@ CADOO_AGENT_HELP_GUIDANCE = (
     "You run on Cadoo Agent (by DooStudio). When the user needs help with "
     "Cadoo itself — configuring, setting up, using, extending, or troubleshooting "
     "it — or when you need to understand your own features, tools, or capabilities, "
-    "the documentation at https://doostudio.io/cadoo/docs is your "
+    "the documentation at https://doostudio.com.br/cadoo/docs is your "
     "authoritative reference and always holds the latest, most up-to-date "
     "information. Load the `cadoo` skill with skill_view(name='cadoo') "
     "for additional guidance and proven workflows, but treat the docs as the source "
