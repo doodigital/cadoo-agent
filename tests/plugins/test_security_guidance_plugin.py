@@ -56,10 +56,10 @@ def _load_patterns():
 def _load_plugin_init():
     """Import the plugin __init__.py with patterns.py as a sibling."""
     plugin_dir = _repo_root() / "plugins" / "security-guidance"
-    if "hermes_plugins" not in sys.modules:
-        ns = types.ModuleType("hermes_plugins")
+    if "cadoo_plugins" not in sys.modules:
+        ns = types.ModuleType("cadoo_plugins")
         ns.__path__ = []
-        sys.modules["hermes_plugins"] = ns
+        sys.modules["cadoo_plugins"] = ns
     spec = importlib.util.spec_from_file_location(
         "hermes_plugins.security_guidance",
         plugin_dir / "__init__.py",
@@ -320,7 +320,7 @@ class TestPluginDiscovery:
 
         # Wipe any cached plugin state from earlier tests in this worker.
         for k in list(sys.modules):
-            if k.startswith(("hermes_plugins", "cadoo_cli.plugins")):
+            if k.startswith(("cadoo_plugins", "cadoo_cli.plugins")):
                 del sys.modules[k]
 
         from cadoo_cli.plugins import _ensure_plugins_discovered

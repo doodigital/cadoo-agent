@@ -58,9 +58,9 @@ class TestWriteDenyExactPaths:
         monkeypatch.setenv("CADOO_HOME", str(profile_home))
 
         # Sanity check: CADOO_HOME does point to the profile dir, not the root.
-        from cadoo_constants import get_cadoo_home, get_default_hermes_root
+        from cadoo_constants import get_cadoo_home, get_default_cadoo_root
         assert get_cadoo_home() == profile_home
-        assert get_default_hermes_root() == root
+        assert get_default_cadoo_root() == root
 
         assert _is_write_denied(str(global_env)) is True
 

@@ -1574,10 +1574,10 @@ def _profile_suffix() -> str:
     """
     import hashlib
     import re
-    from cadoo_constants import get_default_hermes_root
+    from cadoo_constants import get_default_cadoo_root
 
     home = get_cadoo_home().resolve()
-    default = get_default_hermes_root().resolve()
+    default = get_default_cadoo_root().resolve()
     if home == default:
         return ""
     # Detect <root>/profiles/<name> pattern → use the profile name
@@ -1605,14 +1605,14 @@ def _profile_arg(cadoo_home: str | None = None, default_root: str | Path | None 
             service definition for a different user (e.g. system service).
         default_root: Optional Cadoo root to compare against. Used when
             generating a system service for another user from a sudo/root
-            process, where ``Path.home()`` and ``get_default_hermes_root()``
+            process, where ``Path.home()`` and ``get_default_cadoo_root()``
             refer to root but the target profile lives under the service user.
     """
     import re
-    from cadoo_constants import get_default_hermes_root
+    from cadoo_constants import get_default_cadoo_root
 
     home = Path(cadoo_home or str(get_cadoo_home())).resolve()
-    default = Path(default_root).resolve() if default_root else get_default_hermes_root().resolve()
+    default = Path(default_root).resolve() if default_root else get_default_cadoo_root().resolve()
     if home == default:
         return ""
     profiles_root = (default / "profiles").resolve()
@@ -4032,8 +4032,8 @@ def _guard_named_profile_under_multiplexer(force: bool = False) -> None:
         return  # default profile (or unrecognized) — this guard doesn't apply
 
     try:
-        from cadoo_constants import get_default_hermes_root
-        default_root = get_default_hermes_root()
+        from cadoo_constants import get_default_cadoo_root
+        default_root = get_default_cadoo_root()
         # (b) Is the default-profile gateway running?
         from gateway.status import get_running_pid as _default_running_pid  # noqa
     except Exception:

@@ -38,7 +38,7 @@ def fake_hermes(tmp_path, monkeypatch):
     monkeypatch.setenv("CADOO_HOME", str(sec_home))
 
     import cadoo_constants
-    monkeypatch.setattr(cadoo_constants, "get_default_hermes_root", lambda: root)
+    monkeypatch.setattr(cadoo_constants, "get_default_cadoo_root", lambda: root)
 
     import agent.file_safety as fs
     monkeypatch.setattr(fs, "_cadoo_home_path", lambda: sec_home)

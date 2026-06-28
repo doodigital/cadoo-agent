@@ -176,9 +176,9 @@ def check_env_vars():
 
     # Load .env
     try:
-        from cadoo_cli.env_loader import load_hermes_dotenv
+        from cadoo_cli.env_loader import load_cadoo_dotenv
 
-        load_hermes_dotenv(
+        load_cadoo_dotenv(
             cadoo_home=ENV_FILE.parent,
             project_env=PROJECT_ROOT / ".env",
         )

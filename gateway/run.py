@@ -1290,9 +1290,9 @@ _cadoo_home = get_cadoo_home()
 # Load environment variables from ~/.cadoo/.env first.
 # User-managed env files should override stale shell exports on restart.
 from dotenv import load_dotenv  # noqa: F401  # backward-compat for tests that monkeypatch this symbol
-from cadoo_cli.env_loader import load_hermes_dotenv
+from cadoo_cli.env_loader import load_cadoo_dotenv
 _env_path = _cadoo_home / '.env'
-load_hermes_dotenv(cadoo_home=_cadoo_home, project_env=Path(__file__).resolve().parents[1] / '.env')
+load_cadoo_dotenv(cadoo_home=_cadoo_home, project_env=Path(__file__).resolve().parents[1] / '.env')
 
 
 def _reload_runtime_env_preserving_config_authority() -> None:
@@ -1317,7 +1317,7 @@ def _reload_runtime_env_preserving_config_authority() -> None:
         _bridge_max_turns_from_config(_cadoo_home)
         return
 
-    load_hermes_dotenv(
+    load_cadoo_dotenv(
         cadoo_home=_cadoo_home,
         project_env=Path(__file__).resolve().parents[1] / '.env',
     )

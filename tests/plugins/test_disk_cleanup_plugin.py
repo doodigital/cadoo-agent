@@ -58,10 +58,10 @@ def _load_plugin_init():
     )
     # Ensure parent namespace package exists for the relative `. import disk_cleanup`
     import types
-    if "hermes_plugins" not in sys.modules:
-        ns = types.ModuleType("hermes_plugins")
+    if "cadoo_plugins" not in sys.modules:
+        ns = types.ModuleType("cadoo_plugins")
         ns.__path__ = []
-        sys.modules["hermes_plugins"] = ns
+        sys.modules["cadoo_plugins"] = ns
     mod = importlib.util.module_from_spec(spec)
     mod.__package__ = "hermes_plugins.disk_cleanup"
     mod.__path__ = [str(plugin_dir)]

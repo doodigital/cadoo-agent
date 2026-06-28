@@ -23,7 +23,7 @@ from cadoo_constants import (
     reset_cadoo_home_override,
     set_cadoo_home_override,
 )
-from cadoo_cli.env_loader import load_hermes_dotenv
+from cadoo_cli.env_loader import load_cadoo_dotenv
 from utils import is_truthy_value
 from tui_gateway.transport import (
     StdioTransport,
@@ -36,7 +36,7 @@ from tui_gateway.transport import (
 logger = logging.getLogger(__name__)
 
 _cadoo_home = get_cadoo_home()
-load_hermes_dotenv(
+load_cadoo_dotenv(
     cadoo_home=_cadoo_home, project_env=Path(__file__).parent.parent / ".env"
 )
 

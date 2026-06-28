@@ -351,8 +351,8 @@ def _main() -> int:
     import sys
 
     try:
-        from cadoo_cli.env_loader import load_hermes_dotenv
-        load_hermes_dotenv()
+        from cadoo_cli.env_loader import load_cadoo_dotenv
+        load_cadoo_dotenv()
     except Exception:
         pass
 

@@ -53,7 +53,7 @@ def fresh_home(tmp_path, monkeypatch):
         "HERMES_KANBAN_BOARD",
     ):
         monkeypatch.delenv(var, raising=False)
-    # Also reset cadoo_constants cache so get_default_hermes_root() re-reads.
+    # Also reset cadoo_constants cache so get_default_cadoo_root() re-reads.
     try:
         import cadoo_constants
         cadoo_constants._cached_default_hermes_root = None  # type: ignore[attr-defined]

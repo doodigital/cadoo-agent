@@ -11,7 +11,7 @@ import shutil
 from pathlib import Path
 
 from cadoo_cli.config import get_project_root, get_cadoo_home, get_env_path
-from cadoo_cli.env_loader import load_hermes_dotenv
+from cadoo_cli.env_loader import load_cadoo_dotenv
 from cadoo_constants import display_cadoo_home
 from cadoo_constants import agent_browser_runnable
 
@@ -21,7 +21,7 @@ _DHH = display_cadoo_home()  # user-facing display path (e.g. ~/.cadoo or ~/.cad
 
 # Load environment variables from ~/.cadoo/.env so API key checks work
 _env_path = get_env_path()
-load_hermes_dotenv(cadoo_home=_env_path.parent, project_env=PROJECT_ROOT / ".env")
+load_cadoo_dotenv(cadoo_home=_env_path.parent, project_env=PROJECT_ROOT / ".env")
 
 from cadoo_cli.colors import Colors, color
 from cadoo_cli.models import _HERMES_USER_AGENT

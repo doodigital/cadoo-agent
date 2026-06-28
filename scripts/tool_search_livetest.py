@@ -272,8 +272,8 @@ def setup_isolated_home(enabled: bool) -> Path:
         # hand — it never materializes the secret in a local variable in
         # this module, which both avoids a hand-rolled parser bug and keeps
         # static analysis from tainting the transcript records with the key.
-        from cadoo_cli.env_loader import load_hermes_dotenv
-        load_hermes_dotenv(cadoo_home=str(Path.home() / ".cadoo"))
+        from cadoo_cli.env_loader import load_cadoo_dotenv
+        load_cadoo_dotenv(cadoo_home=str(Path.home() / ".cadoo"))
 
     cfg = {
         "model": {

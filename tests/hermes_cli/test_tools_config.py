@@ -290,7 +290,7 @@ def test_get_platform_tools_preserves_explicit_empty_selection():
     # An explicit empty list disables every CONFIGURABLE toolset (web,
     # terminal, memory, …). Non-configurable platform toolsets that ride
     # along on the platform's default composite (e.g. `kanban`, whose tools
-    # live in _HERMES_CORE_TOOLS but aren't user-toggleable) are still
+    # live in _CADOO_CORE_TOOLS but aren't user-toggleable) are still
     # auto-recovered by _get_platform_tools so saving via `cadoo tools`
     # doesn't silently drop them. The contract this test guards is the
     # configurable side: nothing the user could have checked in the TUI

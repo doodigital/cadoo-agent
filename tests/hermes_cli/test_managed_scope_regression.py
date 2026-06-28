@@ -79,21 +79,21 @@ def test_no_managed_dir_means_user_value_wins(cadoo_home):
 
 
 def test_user_env_overrides_shell(tmp_path, monkeypatch):
-    from cadoo_cli.env_loader import load_hermes_dotenv
+    from cadoo_cli.env_loader import load_cadoo_dotenv
 
     home = tmp_path / "home"
     home.mkdir()
     (home / ".env").write_text("FOO_TOKEN=from_user_env\n", encoding="utf-8")
     monkeypatch.setenv("FOO_TOKEN", "from_shell")
-    load_hermes_dotenv(cadoo_home=str(home))
+    load_cadoo_dotenv(cadoo_home=str(home))
     assert os.environ["FOO_TOKEN"] == "from_user_env"
 
 
 def test_missing_user_env_is_noop(tmp_path, monkeypatch):
-    from cadoo_cli.env_loader import load_hermes_dotenv
+    from cadoo_cli.env_loader import load_cadoo_dotenv
 
     home = tmp_path / "home"
     home.mkdir()
     monkeypatch.setenv("BAR_TOKEN", "from_shell")
-    load_hermes_dotenv(cadoo_home=str(home))
+    load_cadoo_dotenv(cadoo_home=str(home))
     assert os.environ["BAR_TOKEN"] == "from_shell"
