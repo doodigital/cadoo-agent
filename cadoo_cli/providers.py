@@ -206,6 +206,11 @@ HERMES_OVERLAYS: Dict[str, HermesOverlay] = {
         transport="bedrock_converse",
         auth_type="aws_sdk",
     ),
+    "local-cli": HermesOverlay(
+        transport="openai_chat",
+        auth_type="local_cli",
+        base_url_override="http://local-cli.internal/v1",
+    ),
 }
 
 
@@ -338,6 +343,13 @@ ALIASES: Dict[str, str] = {
     "gmi-cloud": "gmi",
     "gmicloud": "gmi",
 
+    # Local CLI (claude code, gemini cli, etc.)
+    "local-cli": "local-cli",
+    "localcli": "local-cli",
+    "claude-code": "local-cli",
+    "claudecode": "local-cli",
+    "gemini-cli": "local-cli",
+
     # Local server aliases → virtual "local" concept (resolved via user config)
     "lmstudio": "lmstudio",
     "lm-studio": "lmstudio",
@@ -366,6 +378,7 @@ _LABEL_OVERRIDES: Dict[str, str] = {
     "local": "Local endpoint",
     "bedrock": "AWS Bedrock",
     "ollama-cloud": "Ollama Cloud",
+    "local-cli": "Local CLI (claude/gemini)",
     "xai-oauth": "xAI Grok OAuth (SuperGrok / Premium+)",
 }
 

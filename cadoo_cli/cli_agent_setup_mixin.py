@@ -126,6 +126,9 @@ class CLIAgentSetupMixin:
         self._provider_source = runtime.get("source")
         self.api_key = api_key
         self.base_url = base_url
+        # Propagate local CLI executable name so the dispatch layer can call it.
+        if runtime.get("local_cli"):
+            self._local_cli = runtime["local_cli"]
 
         # When a custom_provider entry carries an explicit `model` field,
         # use it as the effective model name.  Without this, running
