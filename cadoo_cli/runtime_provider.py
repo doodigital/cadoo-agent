@@ -1773,12 +1773,22 @@ def resolve_runtime_provider(
                 guardrail_config["streamProcessingMode"] = _gr["stream_processing_mode"]
             if _gr.get("trace"):
                 guardrail_config["trace"] = _gr["trace"]
-        # Dual-path routing: Claude models use AnthropicBedrock SDK for full
-        # feature parity (prompt caching, thinking budgets, adaptive thinking).
-        # Non-Claude models use the Converse API for multi-model support.
+        # Dual-path routing: Claude models normally use the AnthropicBedrock SDK
+        # (anthropic_messages) for full feature parity. However, AnthropicBedrock
+        # only supports SigV4 — not Bearer tokens. When AWS_BEARER_TOKEN_BEDROCK
+        # is the only credential available (no IAM keys), fall back to the Converse
+        # API (bedrock_converse / boto3) which natively supports bearer auth via
+        # botocore's ScopedEnvTokenProvider.
         _current_model = str(target_model or model_cfg.get("default") or "").strip()
-        if is_anthropic_bedrock_model(_current_model):
-            # Claude on Bedrock → AnthropicBedrock SDK → anthropic_messages path
+        _has_iam_keys = bool(
+            _getenv("AWS_ACCESS_KEY_ID", "").strip()
+            and _getenv("AWS_SECRET_ACCESS_KEY", "").strip()
+        )
+        _has_bearer_only = (
+            bool(_getenv("AWS_BEARER_TOKEN_BEDROCK", "").strip()) and not _has_iam_keys
+        )
+        if is_anthropic_bedrock_model(_current_model) and not _has_bearer_only:
+            # Claude on Bedrock + IAM keys → AnthropicBedrock SDK → anthropic_messages
             runtime = {
                 "provider": "bedrock",
                 "api_mode": "anthropic_messages",
@@ -1790,7 +1800,7 @@ def resolve_runtime_provider(
                 "requested_provider": requested_provider,
             }
         else:
-            # Non-Claude (Nova, DeepSeek, Llama, etc.) → Converse API
+            # Bearer-token-only or non-Claude → Converse API (boto3 handles bearer)
             runtime = {
                 "provider": "bedrock",
                 "api_mode": "bedrock_converse",
