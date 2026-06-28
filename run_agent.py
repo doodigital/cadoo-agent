@@ -1036,7 +1036,7 @@ class AIAgent:
         # Auth/block errors on background tasks (title generation, compression, etc.)
         # are not actionable for the user — log silently instead of showing a warning.
         _detail_lower = detail.lower()
-        if any(code in _detail_lower for code in ("403", "401", "blocked", "unauthorized", "forbidden")):
+        if any(code in _detail_lower for code in ("403", "401", "blocked", "unauthorized", "forbidden", "could not resolve credentials", "no credentials")):
             logger.debug("Auxiliary %s failed (suppressed): %s", task, detail)
             return
         self._emit_warning(f"⚠ Auxiliary {task} failed: {detail}")
