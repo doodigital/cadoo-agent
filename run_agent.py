@@ -1033,6 +1033,12 @@ class AIAgent:
         detail = (detail or exc.__class__.__name__).strip()
         if len(detail) > 220:
             detail = detail[:217].rstrip() + "..."
+        # Auth/block errors on background tasks (title generation, compression, etc.)
+        # are not actionable for the user — log silently instead of showing a warning.
+        _detail_lower = detail.lower()
+        if any(code in _detail_lower for code in ("403", "401", "blocked", "unauthorized", "forbidden")):
+            logger.debug("Auxiliary %s failed (suppressed): %s", task, detail)
+            return
         self._emit_warning(f"⚠ Auxiliary {task} failed: {detail}")
 
     def _current_main_runtime(self) -> Dict[str, str]:
