@@ -12,7 +12,7 @@ from cadoo_constants import (
     find_hermes_node_executable,
     find_node_executable,
     find_node_executable_on_path,
-    get_default_hermes_root,
+    get_default_cadoo_root,
     get_cadoo_home,
     iter_hermes_node_dirs,
     is_container,
@@ -23,14 +23,14 @@ from cadoo_constants import (
 
 
 class TestGetDefaultHermesRoot:
-    """Tests for get_default_hermes_root() — Docker/custom deployment awareness."""
+    """Tests for get_default_cadoo_root() — Docker/custom deployment awareness."""
 
     def test_no_cadoo_home_returns_native(self, tmp_path, monkeypatch):
         """When CADOO_HOME is not set, returns ~/.cadoo."""
         monkeypatch.delenv("CADOO_HOME", raising=False)
         monkeypatch.setattr(Path, "home", lambda: tmp_path)
 
-        assert get_default_hermes_root() == tmp_path / ".cadoo"
+        assert get_default_cadoo_root() == tmp_path / ".cadoo"
 
     def test_cadoo_home_is_native(self, tmp_path, monkeypatch):
         """When CADOO_HOME = ~/.cadoo, returns ~/.cadoo."""
@@ -38,7 +38,7 @@ class TestGetDefaultHermesRoot:
         native.mkdir()
         monkeypatch.setattr(Path, "home", lambda: tmp_path)
         monkeypatch.setenv("CADOO_HOME", str(native))
-        assert get_default_hermes_root() == native
+        assert get_default_cadoo_root() == native
 
     def test_cadoo_home_is_profile(self, tmp_path, monkeypatch):
         """When CADOO_HOME is a profile under ~/.cadoo, returns ~/.cadoo."""
@@ -47,7 +47,7 @@ class TestGetDefaultHermesRoot:
         profile.mkdir(parents=True)
         monkeypatch.setattr(Path, "home", lambda: tmp_path)
         monkeypatch.setenv("CADOO_HOME", str(profile))
-        assert get_default_hermes_root() == native
+        assert get_default_cadoo_root() == native
 
     def test_cadoo_home_is_docker(self, tmp_path, monkeypatch):
         """When CADOO_HOME points outside ~/.cadoo (Docker), returns CADOO_HOME."""
@@ -55,7 +55,7 @@ class TestGetDefaultHermesRoot:
         docker_home.mkdir(parents=True)
         monkeypatch.setattr(Path, "home", lambda: tmp_path)
         monkeypatch.setenv("CADOO_HOME", str(docker_home))
-        assert get_default_hermes_root() == docker_home
+        assert get_default_cadoo_root() == docker_home
 
     def test_cadoo_home_is_custom_path(self, tmp_path, monkeypatch):
         """Any CADOO_HOME outside ~/.cadoo is treated as the root."""
@@ -63,7 +63,7 @@ class TestGetDefaultHermesRoot:
         custom.mkdir()
         monkeypatch.setattr(Path, "home", lambda: tmp_path)
         monkeypatch.setenv("CADOO_HOME", str(custom))
-        assert get_default_hermes_root() == custom
+        assert get_default_cadoo_root() == custom
 
     def test_docker_profile_active(self, tmp_path, monkeypatch):
         """When a Docker profile is active (CADOO_HOME=<root>/profiles/<name>),
@@ -73,7 +73,7 @@ class TestGetDefaultHermesRoot:
         profile.mkdir(parents=True)
         monkeypatch.setattr(Path, "home", lambda: tmp_path)
         monkeypatch.setenv("CADOO_HOME", str(profile))
-        assert get_default_hermes_root() == docker_root
+        assert get_default_cadoo_root() == docker_root
 
     def test_no_cadoo_home_returns_localappdata_root_on_windows(self, tmp_path, monkeypatch):
         """Native Windows falls back to %LOCALAPPDATA%\\cadoo, not ~/.cadoo."""
@@ -83,7 +83,7 @@ class TestGetDefaultHermesRoot:
         monkeypatch.setattr(Path, "home", lambda: tmp_path / "Home")
         monkeypatch.setattr(cadoo_constants.sys, "platform", "win32")
 
-        assert get_default_hermes_root() == local_appdata / "cadoo"
+        assert get_default_cadoo_root() == local_appdata / "cadoo"
 
     def test_no_cadoo_home_uses_windows_path_when_localappdata_missing(self, tmp_path, monkeypatch):
         """Windows fallback still uses AppData/Local/cadoo without LOCALAPPDATA."""
@@ -93,7 +93,7 @@ class TestGetDefaultHermesRoot:
         monkeypatch.setattr(Path, "home", lambda: home)
         monkeypatch.setattr(cadoo_constants.sys, "platform", "win32")
 
-        assert get_default_hermes_root() == home / "AppData" / "Local" / "cadoo"
+        assert get_default_cadoo_root() == home / "AppData" / "Local" / "cadoo"
 
 
 class TestGetHermesHome:

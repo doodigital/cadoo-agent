@@ -238,8 +238,8 @@ class TestSetupLogging:
         """The custom record factory injects session_tag on all records."""
         cadoo_logging.setup_logging(cadoo_home=cadoo_home)
         factory = logging.getLogRecordFactory()
-        assert getattr(factory, "_hermes_session_injector", False), (
-            "Record factory should have _hermes_session_injector marker"
+        assert getattr(factory, "_cadoo_session_injector", False), (
+            "Record factory should have _cadoo_session_injector marker"
         )
         # Verify session_tag exists on a fresh record
         record = factory("test", logging.INFO, "", 0, "msg", (), None)
@@ -605,7 +605,7 @@ class TestComponentPrefixes:
         # break this test.
         gateway_prefixes = cadoo_logging.COMPONENT_PREFIXES["gateway"]
         assert "gateway" in gateway_prefixes
-        assert "hermes_plugins" in gateway_prefixes
+        assert "cadoo_plugins" in gateway_prefixes
         assert "plugins.platforms" in gateway_prefixes
 
     def test_agent_prefix(self):
@@ -643,7 +643,7 @@ class TestSetupVerboseLogging:
             h for h in root.handlers
             if isinstance(h, logging.StreamHandler)
             and not isinstance(h, RotatingFileHandler)
-            and getattr(h, "_hermes_verbose", False)
+            and getattr(h, "_cadoo_verbose", False)
         ]
         assert len(verbose_handlers) == 1
         assert verbose_handlers[0].level == logging.DEBUG
@@ -658,7 +658,7 @@ class TestSetupVerboseLogging:
             h for h in root.handlers
             if isinstance(h, logging.StreamHandler)
             and not isinstance(h, RotatingFileHandler)
-            and getattr(h, "_hermes_verbose", False)
+            and getattr(h, "_cadoo_verbose", False)
         ]
         assert len(verbose_handlers) == 1
 

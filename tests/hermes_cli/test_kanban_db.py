@@ -2768,7 +2768,7 @@ class TestSharedBoardPaths:
         self, tmp_path, monkeypatch
     ):
         # Docker / custom deployment: CADOO_HOME points outside ~/.cadoo.
-        # `get_default_hermes_root()` returns env_home directly when it
+        # `get_default_cadoo_root()` returns env_home directly when it
         # is not a `<root>/profiles/<name>` shape and not under
         # `Path.home() / ".cadoo"`.
         custom_root = tmp_path / "opt" / "cadoo"
@@ -2782,7 +2782,7 @@ class TestSharedBoardPaths:
         self, tmp_path, monkeypatch
     ):
         # Docker profile shape: CADOO_HOME=/opt/cadoo/profiles/coder;
-        # `get_default_hermes_root()` walks up to /opt/cadoo because
+        # `get_default_cadoo_root()` walks up to /opt/cadoo because
         # the immediate parent dir is named "profiles".
         custom_root = tmp_path / "opt" / "cadoo"
         profile = custom_root / "profiles" / "coder"
@@ -2849,7 +2849,7 @@ class TestSharedBoardPaths:
         self, tmp_path, monkeypatch
     ):
         # HERMES_KANBAN_DB pins the file path directly and beats both
-        # HERMES_KANBAN_HOME and the `get_default_hermes_root()` path.
+        # HERMES_KANBAN_HOME and the `get_default_cadoo_root()` path.
         # This is the env the dispatcher injects into workers.
         default_home = tmp_path / ".cadoo"
         default_home.mkdir()

@@ -421,8 +421,8 @@ def _is_windows() -> bool:
 def _is_default_cadoo_home(cadoo_home: Path) -> bool:
     """Return True when ``cadoo_home`` points at the default (non-profile) root."""
     try:
-        from cadoo_constants import get_default_hermes_root
-        return cadoo_home.resolve() == get_default_hermes_root().resolve()
+        from cadoo_constants import get_default_cadoo_root
+        return cadoo_home.resolve() == get_default_cadoo_root().resolve()
     except Exception:
         return False
 

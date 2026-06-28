@@ -262,8 +262,8 @@ def _get_default_cadoo_home() -> Path:
     In Docker/custom deployments where CADOO_HOME is outside ``~/.cadoo``
     (e.g. ``/opt/data``), returns CADOO_HOME directly.
     """
-    from cadoo_constants import get_default_hermes_root
-    return get_default_hermes_root()
+    from cadoo_constants import get_default_cadoo_root
+    return get_default_cadoo_root()
 
 
 def _get_active_profile_path() -> Path:

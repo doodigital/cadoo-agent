@@ -268,6 +268,7 @@ from cadoo_cli.subcommands.gateway import build_gateway_parser
 from cadoo_cli.subcommands.profile import build_profile_parser
 from cadoo_cli.subcommands.model import build_model_parser
 from cadoo_cli.subcommands.setup import build_setup_parser
+from cadoo_cli.subcommands.setup_local import build_setup_local_parser
 from cadoo_cli.subcommands.postinstall import build_postinstall_parser
 from cadoo_cli.subcommands.whatsapp import build_whatsapp_parser
 from cadoo_cli.subcommands.slack import build_slack_parser
@@ -466,9 +467,9 @@ def _apply_profile_override() -> None:
     # the "Docker & Profiles & Dashboard" report.
     if profile_name is None and not os.environ.get("HERMES_S6_SUPERVISED_CHILD"):
         try:
-            from cadoo_constants import get_default_hermes_root
+            from cadoo_constants import get_default_cadoo_root
 
-            active_path = get_default_hermes_root() / "active_profile"
+            active_path = get_default_cadoo_root() / "active_profile"
             if active_path.exists():
                 name = active_path.read_text().strip()
                 if name and name != "default":
@@ -510,9 +511,9 @@ _apply_profile_override()
 # Load .env from ~/.cadoo/.env first, then project root as dev fallback.
 # User-managed env files should override stale shell exports on restart.
 from cadoo_cli.config import get_cadoo_home
-from cadoo_cli.env_loader import load_hermes_dotenv
+from cadoo_cli.env_loader import load_cadoo_dotenv
 
-load_hermes_dotenv(project_env=PROJECT_ROOT / ".env")
+load_cadoo_dotenv(project_env=PROJECT_ROOT / ".env")
 
 # Bridge security.redact_secrets from config.yaml → HERMES_REDACT_SECRETS env
 # var BEFORE cadoo_logging imports agent.redact (which snapshots the flag at
@@ -2677,6 +2678,13 @@ def cmd_setup(args):
     from cadoo_cli.setup import run_setup_wizard
 
     run_setup_wizard(args)
+
+
+def cmd_setup_local(args):
+    """Install and configure a local Ollama model."""
+    from cadoo_cli.local_setup import run_local_setup
+
+    run_local_setup(args)
 
 
 def cmd_postinstall(args):
@@ -6711,9 +6719,9 @@ def _invalidate_update_cache():
     """
     homes = []
     # Default profile home (Docker-aware — uses /opt/data in Docker)
-    from cadoo_constants import get_default_hermes_root
+    from cadoo_constants import get_default_cadoo_root
 
-    default_home = get_default_hermes_root()
+    default_home = get_default_cadoo_root()
     homes.append(default_home)
     # Named profiles under <root>/profiles/
     profiles_root = default_home / "profiles"
@@ -11331,13 +11339,13 @@ def cmd_dashboard(args):
         # CADOO_HOME falls back to $HOME/.cadoo = /opt/data/.cadoo — an
         # empty, auto-seeded home where the dashboard sees only the default
         # profile and the install-method stamp is missing (so the Docker
-        # update-button guard also misfires).  get_default_hermes_root()
+        # update-button guard also misfires).  get_default_cadoo_root()
         # returns the root for both layouts: ~/.cadoo for a standard install
         # and /opt/data for Docker (it strips a trailing profiles/<name>).
         # See the support report for the double-mount workaround this avoids.
         try:
-            from cadoo_constants import get_default_hermes_root
-            env["CADOO_HOME"] = str(get_default_hermes_root())
+            from cadoo_constants import get_default_cadoo_root
+            env["CADOO_HOME"] = str(get_default_cadoo_root())
         except Exception:
             # Best-effort: if root resolution fails, fall back to the prior
             # behaviour (drop CADOO_HOME) rather than block the reroute.
@@ -11546,7 +11554,7 @@ _BUILTIN_SUBCOMMANDS = frozenset(
         "gui", "desktop", "kanban", "login", "logout", "logs", "lsp", "mcp", "memory", "migrate",
         "model", "pairing", "pets", "plugins", "portal", "postinstall", "profile", "proxy",
         "prompt-size",
-        "send", "sessions", "setup",
+        "send", "sessions", "setup", "setup-local",
         "skills", "slack", "status", "tools", "uninstall", "update",
         "version", "webhook", "whatsapp", "whatsapp-cloud", "chat", "secrets", "security",
         # Help-ish invocations — plugin commands not being listed in
@@ -12200,6 +12208,7 @@ def main():
     # setup command  (parser built in cadoo_cli/subcommands/setup.py)
     # =========================================================================
     build_setup_parser(subparsers, cmd_setup=cmd_setup)
+    build_setup_local_parser(subparsers, cmd_setup_local=cmd_setup_local)
 
     # =========================================================================
     # postinstall command  (parser built in cadoo_cli/subcommands/postinstall.py)

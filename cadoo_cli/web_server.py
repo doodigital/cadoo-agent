@@ -1328,9 +1328,9 @@ def _default_hermes_root_is_opt_data() -> bool:
     if not raw:
         return False
     try:
-        from cadoo_constants import get_default_hermes_root
+        from cadoo_constants import get_default_cadoo_root
 
-        root = get_default_hermes_root().expanduser().resolve(strict=False)
+        root = get_default_cadoo_root().expanduser().resolve(strict=False)
     except (OSError, RuntimeError):
         root = Path(raw).expanduser().resolve(strict=False)
     return root == _HOSTED_MANAGED_FILES_ROOT
@@ -5589,7 +5589,7 @@ def _anthropic_oauth_status() -> Dict[str, Any]:
     2. ``ANTHROPIC_API_KEY`` → ``ANTHROPIC_TOKEN`` → ``CLAUDE_CODE_OAUTH_TOKEN``
        env vars (registry order) — from ``.env``, the shell, or an external
        secret source like Bitwarden (whose keys are injected into the process
-       env during ``load_hermes_dotenv()``, so the same check covers them)
+       env during ``load_cadoo_dotenv()``, so the same check covers them)
 
     Claude Code's ``~/.claude/.credentials.json`` is deliberately NOT read
     here — it has its own dedicated catalog entry (``claude-code`` →

@@ -122,7 +122,7 @@ def test_apply_external_secret_sources_noop_when_disabled(tmp_path, monkeypatch)
 
 
 def test_apply_external_secret_sources_dedupes_within_process(tmp_path, monkeypatch):
-    """``load_hermes_dotenv()`` is called at module-import time from several
+    """``load_cadoo_dotenv()`` is called at module-import time from several
     hot modules (cli.py, cadoo_cli/main.py, run_agent.py, ...).  The
     Bitwarden status line previously printed once per call — 3-5x per
     startup.  The applied-home guard must short-circuit subsequent calls

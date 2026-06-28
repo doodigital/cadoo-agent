@@ -196,7 +196,7 @@ VALID_HOOKS: Set[str] = {
 
 ENTRY_POINTS_GROUP = "cadoo.plugins"
 
-_NS_PARENT = "hermes_plugins"
+_NS_PARENT = "cadoo_plugins"
 
 
 def _env_enabled(name: str) -> bool:

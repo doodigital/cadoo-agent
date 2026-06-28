@@ -198,7 +198,7 @@ class TestBackup:
         _make_hermes_tree(cadoo_home)
 
         monkeypatch.setenv("CADOO_HOME", str(cadoo_home))
-        # get_default_hermes_root needs this
+        # get_default_cadoo_root needs this
         monkeypatch.setattr(Path, "home", lambda: tmp_path)
 
         out_zip = tmp_path / "backup.zip"

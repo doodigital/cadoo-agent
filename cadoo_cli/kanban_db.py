@@ -304,7 +304,7 @@ def kanban_home() -> Path:
 
     1. ``HERMES_KANBAN_HOME`` env var when set and non-empty (explicit
        override for tests and unusual deployments).
-    2. ``get_default_hermes_root()``, which already returns ``<root>``
+    2. ``get_default_cadoo_root()``, which already returns ``<root>``
        when ``CADOO_HOME`` is ``<root>/profiles/<name>``, and returns
        ``CADOO_HOME`` directly for Docker / custom deployments.
 
@@ -316,8 +316,8 @@ def kanban_home() -> Path:
     override = os.environ.get("HERMES_KANBAN_HOME", "").strip()
     if override:
         return Path(override).expanduser()
-    from cadoo_constants import get_default_hermes_root
-    return get_default_hermes_root()
+    from cadoo_constants import get_default_cadoo_root
+    return get_default_cadoo_root()
 
 
 def boards_root() -> Path:
@@ -7376,7 +7376,7 @@ def _default_spawn(
     # Pin the shared board + workspaces root the dispatcher resolved, so
     # that even when the worker activates a profile (`cadoo -p <name>`
     # rewrites CADOO_HOME), its kanban paths still match the
-    # dispatcher's. Belt-and-braces with the `get_default_hermes_root()`
+    # dispatcher's. Belt-and-braces with the `get_default_cadoo_root()`
     # resolution in `kanban_home()` — symmetric resolution is the norm,
     # but unusual symlink / Docker layouts are caught here too.
     env["HERMES_KANBAN_DB"] = str(kanban_db_path(board=board))
@@ -8148,8 +8148,8 @@ def list_profiles_on_disk() -> list[str]:
     path).
     """
     try:
-        from cadoo_constants import get_default_hermes_root
-        default_root = get_default_hermes_root()
+        from cadoo_constants import get_default_cadoo_root
+        default_root = get_default_cadoo_root()
         profiles_dir = default_root / "profiles"
     except Exception:
         return []
