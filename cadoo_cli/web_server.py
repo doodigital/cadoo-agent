@@ -5599,11 +5599,11 @@ def _anthropic_oauth_status() -> Dict[str, Any]:
     try:
         from agent.anthropic_adapter import (
             read_hermes_oauth_credentials,
-            _HERMES_OAUTH_FILE,
+            _CADOO_OAUTH_FILE,
         )
     except ImportError:
         read_hermes_oauth_credentials = None  # type: ignore
-        _HERMES_OAUTH_FILE = None  # type: ignore
+        _CADOO_OAUTH_FILE = None  # type: ignore
 
     hermes_creds = None
     if read_hermes_oauth_credentials:
@@ -5615,7 +5615,7 @@ def _anthropic_oauth_status() -> Dict[str, Any]:
         return {
             "logged_in": True,
             "source": "hermes_pkce",
-            "source_label": f"Cadoo PKCE ({_HERMES_OAUTH_FILE})",
+            "source_label": f"Cadoo PKCE ({_CADOO_OAUTH_FILE})",
             "token_preview": _truncate_token(hermes_creds.get("accessToken")),
             "expires_at": hermes_creds.get("expiresAt"),
             "has_refresh_token": bool(hermes_creds.get("refreshToken")),
@@ -6052,9 +6052,9 @@ async def disconnect_oauth_provider(
         if provider_id == "anthropic":
             cleared = False
             try:
-                from agent.anthropic_adapter import _HERMES_OAUTH_FILE
-                if _HERMES_OAUTH_FILE.exists():
-                    _HERMES_OAUTH_FILE.unlink()
+                from agent.anthropic_adapter import _CADOO_OAUTH_FILE
+                if _CADOO_OAUTH_FILE.exists():
+                    _CADOO_OAUTH_FILE.unlink()
                     cleared = True
             except Exception:
                 pass
@@ -6211,24 +6211,24 @@ def _save_anthropic_oauth_creds(access_token: str, refresh_token: str, expires_a
     Mirrors what auth_commands.add_command does so the dashboard flow leaves
     the system in the same state as ``cadoo auth add anthropic``.
     """
-    from agent.anthropic_adapter import _HERMES_OAUTH_FILE
+    from agent.anthropic_adapter import _CADOO_OAUTH_FILE
     payload = {
         "accessToken": access_token,
         "refreshToken": refresh_token,
         "expiresAt": expires_at_ms,
     }
-    _HERMES_OAUTH_FILE.parent.mkdir(parents=True, exist_ok=True)
-    tmp_path = _HERMES_OAUTH_FILE.with_name(
-        f"{_HERMES_OAUTH_FILE.name}.tmp.{os.getpid()}.{secrets.token_hex(8)}"
+    _CADOO_OAUTH_FILE.parent.mkdir(parents=True, exist_ok=True)
+    tmp_path = _CADOO_OAUTH_FILE.with_name(
+        f"{_CADOO_OAUTH_FILE.name}.tmp.{os.getpid()}.{secrets.token_hex(8)}"
     )
     try:
         with tmp_path.open("w", encoding="utf-8") as handle:
             handle.write(json.dumps(payload, indent=2))
             handle.flush()
             os.fsync(handle.fileno())
-        os.replace(tmp_path, _HERMES_OAUTH_FILE)
+        os.replace(tmp_path, _CADOO_OAUTH_FILE)
         try:
-            _HERMES_OAUTH_FILE.chmod(stat.S_IRUSR | stat.S_IWUSR)
+            _CADOO_OAUTH_FILE.chmod(stat.S_IRUSR | stat.S_IWUSR)
         except OSError:
             pass
     finally:

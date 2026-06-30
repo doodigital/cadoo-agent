@@ -964,7 +964,9 @@ Two shapes:
 - **Single:** pass `goal` (+ optional `context`, `toolsets`).
 - **Batch (parallel):** pass `tasks: [...]` — each gets its own subagent
   running concurrently. Concurrency is capped by
-  `delegation.max_concurrent_children` (default 3).
+  `delegation.max_concurrent_children` (default 3). When the provider is
+  `bedrock`, the cap defaults to **1** (serialized) to avoid AWS rate limits —
+  override with `delegation.max_concurrent_children_bedrock`.
 
 Roles:
 
@@ -975,7 +977,8 @@ Roles:
   and bounded by `delegation.max_spawn_depth` (default 2).
 
 Key config knobs (under `delegation:` in `config.yaml`):
-`max_concurrent_children`, `max_spawn_depth`, `child_timeout_seconds`,
+`max_concurrent_children`, `max_concurrent_children_bedrock`,
+`max_spawn_depth`, `child_timeout_seconds`,
 `orchestrator_enabled`, `subagent_auto_approve`, `inherit_mcp_toolsets`,
 `max_iterations`.
 

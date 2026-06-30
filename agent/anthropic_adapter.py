@@ -1308,7 +1308,11 @@ _OAUTH_TOKEN_URLS = [
 _OAUTH_TOKEN_URL = _OAUTH_TOKEN_URLS[0]
 _OAUTH_REDIRECT_URI = "https://console.anthropic.com/oauth/code/callback"
 _OAUTH_SCOPES = "org:create_api_key user:profile user:inference"
-_HERMES_OAUTH_FILE = get_cadoo_home() / ".anthropic_oauth.json"
+_CADOO_OAUTH_FILE = (
+    Path(os.environ["CADOO_OAUTH_FILE"])
+    if "CADOO_OAUTH_FILE" in os.environ
+    else get_cadoo_home() / ".anthropic_oauth.json"
+)
 
 
 def _generate_pkce() -> tuple:
@@ -1453,9 +1457,9 @@ def run_hermes_oauth_login_pure() -> Optional[Dict[str, Any]]:
 
 def read_hermes_oauth_credentials() -> Optional[Dict[str, Any]]:
     """Read Cadoo-managed OAuth credentials from ~/.cadoo/.anthropic_oauth.json."""
-    if _HERMES_OAUTH_FILE.exists():
+    if _CADOO_OAUTH_FILE.exists():
         try:
-            data = json.loads(_HERMES_OAUTH_FILE.read_text(encoding="utf-8"))
+            data = json.loads(_CADOO_OAUTH_FILE.read_text(encoding="utf-8"))
             if data.get("accessToken"):
                 return data
         except (json.JSONDecodeError, OSError, IOError) as e:

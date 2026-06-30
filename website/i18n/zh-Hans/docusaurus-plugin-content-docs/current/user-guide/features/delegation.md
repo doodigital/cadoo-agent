@@ -121,7 +121,7 @@ delegate_task(
 
 当你提供 `tasks` 数组时，子智能体会使用线程池**并行**运行：
 
-- **最大并发数：** 默认 3 个任务（可通过 `delegation.max_concurrent_children` 或环境变量 `DELEGATION_MAX_CONCURRENT_CHILDREN` 配置；最低为 1，无硬性上限）。超出限制的批次会返回工具错误，而不是被静默截断。
+- **最大并发数：** 默认 3 个任务（可通过 `delegation.max_concurrent_children` 或环境变量 `DELEGATION_MAX_CONCURRENT_CHILDREN` 配置；最低为 1，无硬性上限）。超出限制的批次会返回工具错误，而不是被静默截断。**Bedrock 例外：** 当活跃 provider 为 `bedrock` 时，默认上限为 **1**（串行），以遵守 AWS 严格的每区域限流策略——可通过 `delegation.max_concurrent_children_bedrock` 或 `DELEGATION_MAX_CONCURRENT_CHILDREN_BEDROCK` 覆盖。
 - **线程池：** 使用 `ThreadPoolExecutor`，以配置的并发限制作为最大工作线程数
 - **进度显示：** 在 CLI 模式下，树形视图会实时显示每个子智能体的工具调用，并附带每个任务的完成行。在 gateway 模式下，进度会被批量汇总并转发给父智能体的进度回调
 - **结果排序：** 结果按任务索引排序，与输入顺序一致，不受完成顺序影响

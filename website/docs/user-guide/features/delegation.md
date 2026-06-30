@@ -121,7 +121,7 @@ delegate_task(
 
 When you provide a `tasks` array, subagents run in **parallel** using a thread pool:
 
-- **Maximum concurrency:** 3 tasks by default (configurable via `delegation.max_concurrent_children` or the `DELEGATION_MAX_CONCURRENT_CHILDREN` env var; floor of 1, no hard ceiling). Batches larger than the limit return a tool error rather than being silently truncated.
+- **Maximum concurrency:** 3 tasks by default (configurable via `delegation.max_concurrent_children` or the `DELEGATION_MAX_CONCURRENT_CHILDREN` env var; floor of 1, no hard ceiling). Batches larger than the limit return a tool error rather than being silently truncated. **Bedrock exception:** when the active provider is `bedrock`, the limit defaults to **1** (serialized) to stay within AWS's strict per-region rate limits — override with `delegation.max_concurrent_children_bedrock` or `DELEGATION_MAX_CONCURRENT_CHILDREN_BEDROCK`.
 - **Thread pool:** Uses `ThreadPoolExecutor` with the configured concurrency limit as max workers
 - **Progress display:** In CLI mode, a tree-view shows tool calls from each subagent in real-time with per-task completion lines. In gateway mode, progress is batched and relayed to the parent's progress callback
 - **Result ordering:** Results are sorted by task index to match input order regardless of completion order
@@ -268,7 +268,8 @@ For **durable long-running work** that must survive interrupts or outlive the cu
 # In ~/.cadoo/config.yaml
 delegation:
   max_iterations: 50                        # Max turns per child (default: 50)
-  # max_concurrent_children: 3              # Parallel children per batch (default: 3)
+  # max_concurrent_children: 3              # Parallel children per batch (default: 3; ignored when provider is bedrock)
+  # max_concurrent_children_bedrock: 1      # Bedrock-specific cap (default: 1 — serialized to avoid AWS rate limits)
   # max_spawn_depth: 1                      # Tree depth (floor 1, no ceiling, default 1 = flat). Raise to 2 to allow orchestrator children to spawn leaves; 3+ for deeper trees.
   # orchestrator_enabled: true              # Disable to force all children to leaf role.
   model: "google/gemini-3-flash-preview"             # Optional provider/model override

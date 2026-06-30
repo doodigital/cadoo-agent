@@ -365,16 +365,45 @@ def _normalize_role(r: Optional[str]) -> str:
     return "leaf"
 
 
-def _get_max_concurrent_children() -> int:
+_DEFAULT_MAX_CONCURRENT_CHILDREN_BEDROCK = 1
+
+
+def _get_max_concurrent_children(provider: Optional[str] = None) -> int:
     """Read delegation.max_concurrent_children from config, falling back to
     DELEGATION_MAX_CONCURRENT_CHILDREN env var, then the default (3).
 
-    Users can raise this as high as they want; only the floor (1) is enforced.
+    When ``provider`` is ``"bedrock"``, the Bedrock-specific config key
+    ``delegation.max_concurrent_children_bedrock`` is checked first; if not
+    set, defaults to 1 to avoid hitting Bedrock's strict per-region rate
+    limits.  All other providers use the generic key and default (3).
 
-    Uses the same ``_load_config()`` path that the rest of ``delegate_task``
-    uses, keeping config priority consistent (config.yaml > env > default).
+    Users can raise these as high as they want; only the floor (1) is enforced.
     """
     cfg = _load_config()
+
+    is_bedrock = (provider or "").lower() == "bedrock"
+
+    if is_bedrock:
+        bedrock_val = cfg.get("max_concurrent_children_bedrock")
+        if bedrock_val is not None:
+            try:
+                return max(1, int(bedrock_val))
+            except (TypeError, ValueError):
+                logger.warning(
+                    "delegation.max_concurrent_children_bedrock=%r is not a valid integer; "
+                    "using default %d",
+                    bedrock_val,
+                    _DEFAULT_MAX_CONCURRENT_CHILDREN_BEDROCK,
+                )
+                return _DEFAULT_MAX_CONCURRENT_CHILDREN_BEDROCK
+        env_bedrock = os.getenv("DELEGATION_MAX_CONCURRENT_CHILDREN_BEDROCK")
+        if env_bedrock:
+            try:
+                return max(1, int(env_bedrock))
+            except (TypeError, ValueError):
+                pass
+        return _DEFAULT_MAX_CONCURRENT_CHILDREN_BEDROCK
+
     val = cfg.get("max_concurrent_children")
     if val is not None:
         try:
@@ -2162,8 +2191,11 @@ def delegate_task(
     except ValueError as exc:
         return tool_error(str(exc))
 
-    # Normalize to task list
-    max_children = _get_max_concurrent_children()
+    # Normalize to task list — use the effective provider so Bedrock cap applies.
+    _effective_provider_for_cap = (
+        (creds or {}).get("provider") or getattr(parent_agent, "provider", None)
+    )
+    max_children = _get_max_concurrent_children(_effective_provider_for_cap)
     recovered_tasks, tasks_error = _recover_tasks_from_json_string(tasks)
     if tasks_error:
         return tool_error(tasks_error)
